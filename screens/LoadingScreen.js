@@ -1,12 +1,11 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
+import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 function LoadingScreen(props) {
-  console.log('LoadingScreen', props);
   const { navigation } = props;
 
   async function loadResourcesAsync() {
@@ -29,7 +28,7 @@ function LoadingScreen(props) {
   }
 
   function navigateLoginScreen() {
-    navigation.navigate('Home');
+    navigation.navigate('Login');
   }
 
   return (
