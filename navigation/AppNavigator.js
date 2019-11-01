@@ -1,23 +1,27 @@
-import React from 'react';
-import { createAppContainer, createStackNavigator, createSwitchNavigator, createDrawerNavigator } from 'react-navigation';
+import {
+  createAppContainer,
+  createSwitchNavigator,
+  createDrawerNavigator
+} from 'react-navigation';
 
 import LoadingScreen from '../screens/LoadingScreen';
 import LoginScreen from '../screens/LoginScreen';
-import HomeScreen from '../screens/HomeScreen';
+import SettingStack from './SettingStackNavigator';
 import MainTab from './MainTabNavigator';
 
-const SettingsStack = createStackNavigator ({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      headerTitle: 'Home',
-    },
-  }
-});
-
 const mainDrawer = createDrawerNavigator({
-  Main: MainTab,
-  Settings: SettingsStack
+  Main: {
+    screen: MainTab,
+    navigationOptions: {
+      drawerLabel: 'Main'
+    }
+  },
+  Settings: {
+    screen: SettingStack,
+    navigationOptions: {
+      drawerLabel: 'Settings',
+    }
+  }
 });
 
 const AppNavigator = createSwitchNavigator(

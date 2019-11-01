@@ -15,7 +15,7 @@ export default function LinksScreen() {
 }
 
 LinksScreen.navigationOptions = {
-  title: 'Links',
+  title: '보고서 작성하기',
 };
 
 const styles = StyleSheet.create({
