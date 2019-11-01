@@ -20,15 +20,11 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: '보고서',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={`ios-folder${focused ? '-open' : ''}`}
     />
   ),
 };
@@ -43,15 +39,31 @@ const LinksStack = createStackNavigator(
 );
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+  tabBarLabel: '작성하기',
+  tabBarIcon: () => (
+    <TabBarIcon name={'ios-paper'} />
   ),
 };
 
 LinksStack.path = '';
 
-const SettingsStack = createStackNavigator(
+const TemplatesStack = createStackNavigator(
+  {
+    Settings: SettingsScreen,
+  },
+  config
+);
+
+TemplatesStack.navigationOptions = {
+  tabBarLabel: '템플릿 추가',
+  tabBarIcon: () => (
+    <TabBarIcon name={'ios-add-circle-outline'} />
+  ),
+};
+
+TemplatesStack.path = '';
+
+const SettingsStack = createStackNavigator (
   {
     Settings: SettingsScreen,
   },
@@ -59,9 +71,9 @@ const SettingsStack = createStackNavigator(
 );
 
 SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+  tabBarLabel: '마이 페이지',
+  tabBarIcon: () => (
+    <TabBarIcon name={'ios-contact'} />
   ),
 };
 
@@ -70,7 +82,8 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
+  TemplatesStack,
+  SettingsStack
 });
 
 tabNavigator.path = '';
