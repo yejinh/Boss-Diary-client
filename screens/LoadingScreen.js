@@ -1,34 +1,32 @@
+import React, { useState } from 'react';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
 
-function LoadingScreen(props) {
+export default function LoadingScreen(props) {
+  const [ isReady, setIsReady ] = useState(false);
   const { navigation } = props;
 
   async function loadResourcesAsync() {
-    await Promise.all([
-      Asset.loadAsync([
-      ]),
-      Font.loadAsync({
-        ...Ionicons.font,
-        'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
-      }),
-    ]);
+    await Font.loadAsync({
+      ...Ionicons.font,
+    });
+
+    setIsReady(true);
   }
 
   function handleLoadingError(error) {
     console.warn(error);
   }
 
-  function handleFinishLoading(setIsLoading) {
-    setIsLoading(true);
-  }
+  async function navigateLoginScreen() {
+    const token = await SecureStore.getItemAsync('ACCESS_TOKEN');
 
-  function navigateLoginScreen() {
-    navigation.navigate('Login');
+    if (isReady) {
+      navigation.navigate(token ? 'Main' : 'Login');
+    }
   }
 
   return (
@@ -39,5 +37,3 @@ function LoadingScreen(props) {
     />
   );
 }
-
-export default LoadingScreen;
