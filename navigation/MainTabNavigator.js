@@ -1,25 +1,22 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+  createSwitchNavigator,
+  createDrawerNavigator
+} from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
+import ReportsScreen from '../screens/ReportsScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+import TemplateScreen from '../screens/SettingsScreen';
 
-const config = Platform.select({
-  web: { headerMode: 'screen' },
-  default: {},
-});
-
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
-  },
-  config
+const ReportsStack = createStackNavigator(
+  { Reports: ReportsScreen }
 );
 
-HomeStack.navigationOptions = {
+ReportsStack.navigationOptions = {
   tabBarLabel: '보고서',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -29,29 +26,23 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+ReportsStack.path = '';
 
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
-  },
-  config
+const NewReportStack = createStackNavigator(
+  { Links: LinksScreen }
 );
 
-LinksStack.navigationOptions = {
+NewReportStack.navigationOptions = {
   tabBarLabel: '작성하기',
   tabBarIcon: () => (
     <TabBarIcon name={'ios-paper'} />
   ),
 };
 
-LinksStack.path = '';
+NewReportStack.path = '';
 
 const TemplatesStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
+  { Settings: TemplateScreen }
 );
 
 TemplatesStack.navigationOptions = {
@@ -63,29 +54,12 @@ TemplatesStack.navigationOptions = {
 
 TemplatesStack.path = '';
 
-const SettingsStack = createStackNavigator (
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: '마이 페이지',
-  tabBarIcon: () => (
-    <TabBarIcon name={'ios-contact'} />
-  ),
-};
-
-SettingsStack.path = '';
-
-const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  TemplatesStack,
-  SettingsStack
+const MainTab = createBottomTabNavigator({
+  ReportsStack,
+  NewReportStack,
+  TemplatesStack
 });
 
-tabNavigator.path = '';
+MainTab.path = '';
 
-export default tabNavigator;
+export default MainTab;

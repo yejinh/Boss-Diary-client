@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import * as SecureStore from 'expo-secure-store';
 import { Ionicons } from '@expo/vector-icons';
@@ -25,7 +24,7 @@ export default function LoadingScreen(props) {
     const token = await SecureStore.getItemAsync('ACCESS_TOKEN');
 
     if (isReady) {
-      navigation.navigate(token ? 'Main' : 'Login');
+      navigation.navigate(token ? 'App' : 'App');
     }
   }
 
