@@ -6,7 +6,7 @@ const SettingsStack = createStackNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: {
-        headerTitle: 'Home',
+        headerTitle: '마이 페이지',
       },
     }
   },

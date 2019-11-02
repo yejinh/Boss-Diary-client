@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Facebook from 'expo-facebook';
-import * as SecureStore from 'expo-secure-store';
 import getEnvVars from '../environment';
 import {
   ScrollView,
@@ -11,10 +10,11 @@ import {
 } from 'react-native';
 import Color from '../constants/Colors';
 
-const { API_URL, FACEBOOK_APP_ID } = getEnvVars();
+const { FACEBOOK_APP_ID } = getEnvVars();
 
 export default function LoginScreen(props) {
   const { navigation } = props;
+  const { fetchFacebookData } = props.screenProps;
 
   async function _login() {
     try {
@@ -24,18 +24,7 @@ export default function LoginScreen(props) {
       );
 
       if (type === 'success') {
-        const FBres = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=name,email,picture.type(large)`);
-        const { name, email, picture } = await FBres.json();
-
-        const res = await fetch(`${API_URL}/api/auth/authenticate`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ email, name, picture })
-        });
-
-        const { access_token } = await res.json();
-
-        await SecureStore.setItemAsync('ACCESS_TOKEN', access_token);
+        await fetchFacebookData(token);
         navigation.navigate('Main');
       }
     } catch(err) {

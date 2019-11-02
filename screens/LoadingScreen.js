@@ -24,7 +24,7 @@ export default function LoadingScreen(props) {
     const token = await SecureStore.getItemAsync('ACCESS_TOKEN');
 
     if (isReady) {
-      navigation.navigate(token ? 'App' : 'App');
+      navigation.navigate(token ? 'App' : 'Login');
     }
   }
 

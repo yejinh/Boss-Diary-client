@@ -9,20 +9,25 @@ import LoginScreen from '../screens/LoginScreen';
 import SettingStack from './SettingStackNavigator';
 import MainTab from './MainTabNavigator';
 
-const mainDrawer = createDrawerNavigator({
-  Main: {
-    screen: MainTab,
-    navigationOptions: {
-      drawerLabel: 'Main'
+const mainDrawer = createDrawerNavigator(
+  {
+    Main: {
+      screen: MainTab,
+      navigationOptions: {
+        drawerLabel: 'Main'
+      }
+    },
+    Settings: {
+      screen: SettingStack,
+      navigationOptions: {
+        drawerLabel: 'Settings',
+      }
     }
   },
-  Settings: {
-    screen: SettingStack,
-    navigationOptions: {
-      drawerLabel: 'Settings',
-    }
+  {
+    initialRouteName: 'Main'
   }
-});
+);
 
 const AppNavigator = createSwitchNavigator(
   {
