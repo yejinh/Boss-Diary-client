@@ -1,9 +1,9 @@
 import React from 'react';
 import {
   createStackNavigator,
-  createBottomTabNavigator,
-  HeaderBackButton
+  createBottomTabNavigator
 } from 'react-navigation';
+import BurgerMenu from '../components/BurgerMenu';
 
 import TabBarIcon from '../components/TabBarIcon';
 import ReportsScreen from '../screens/ReportsScreen';
@@ -15,9 +15,10 @@ const ReportsStack = createStackNavigator(
   {
     Reports: {
       screen: ReportsScreen,
-      navigationOptions: {
-        headerTitle: '보고서 보관함'
-      }
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: '보고서 보관함',
+        headerLeft: () => <BurgerMenu nav = {navigation} />
+      })
     }
   }
 );
@@ -26,9 +27,10 @@ const NewReportStack = createStackNavigator(
   {
     NewReport: {
       screen: LinksScreen,
-      navigationOptions: {
-        headerTitle: '보고서 작성하기'
-      }
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: '보고서 작성하기',
+        headerLeft: () => <BurgerMenu nav = {navigation} />
+      })
     }
   }
 );
@@ -37,10 +39,11 @@ const TemplatesStack = createStackNavigator(
   {
     Templates: {
       screen: TemplateScreen,
-      navigationOptions: {
+      navigationOptions: ({ navigation }) => ({
         headerTitle: '템플릿 구매하기',
-        headerBackTitle: ' '
-      }
+        headerBackTitle: ' ',
+        headerLeft: () => <BurgerMenu nav = {navigation} />
+      })
     },
     TemplateDetail: {
       screen: TemplateDetailScreen,
@@ -50,7 +53,8 @@ const TemplatesStack = createStackNavigator(
     }
   },
   {
-    mode: 'modal'
+    mode: 'modal',
+    initialRouteName: 'Templates'
   }
 );
 
@@ -66,15 +70,21 @@ ReportsStack.navigationOptions = {
 
 NewReportStack.navigationOptions = {
   tabBarLabel: '작성하기',
-  tabBarIcon: () => (
-    <TabBarIcon name={'ios-paper'} />
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name='ios-create'
+    />
   )
 };
 
 TemplatesStack.navigationOptions = {
   tabBarLabel: '드림 디포',
-  tabBarIcon: () => (
-    <TabBarIcon name={'ios-add-circle-outline'} />
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon
+      focused={focused}
+      name={`ios-add-circle${focused ? '' : '-outline'}`}
+    />
   )
 };
 

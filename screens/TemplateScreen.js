@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Spinner } from 'native-base';
 import {
   ScrollView,
   View,
@@ -8,6 +7,8 @@ import {
   TouchableOpacity,
   StyleSheet
 } from 'react-native';
+import LoadingSpinner from '../components/Spinner';
+import Color from '../constants/Colors';
 
 export default function SettingsScreen(props) {
   const { navigation } = props;
@@ -17,7 +18,7 @@ export default function SettingsScreen(props) {
     fetchTemplates();
   }, []);
 
-  if (!templates.length) return <Spinner style={styles.spinnerContainer} color={'#999999'} />;
+  if (!templates.length) return <LoadingSpinner />;
 
   return (
     <View style={styles.container}>
@@ -46,7 +47,7 @@ export default function SettingsScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Color.ultraLightGray,
   },
   spinnerContainer: {
     flex: 1,
@@ -55,16 +56,23 @@ const styles = StyleSheet.create({
   },
   templatesContainer: {
     flex: 1,
+    justifyContent: 'space-between',
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginTop: 20,
+    marginRight: 10,
+    marginLeft: 20,
   },
   templateContainer: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginRight: 10,
+    marginBottom: 20
   },
   templateThum: {
-    width: 200,
-    height: 300,
-    borderRadius: 10
+    borderWidth: 0.3,
+    width: 180,
+    height: 280,
+    marginBottom: 10
   }
 });

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Spinner } from 'native-base';
 import {
   Image,
   Platform,
@@ -8,9 +7,9 @@ import {
   Text,
   View
 } from 'react-native';
-import Color from '../constants/Colors';
-
+import LoadingSpinner from '../components/Spinner';
 import { MonoText } from '../components/StyledText';
+import Colors from '../constants/Colors';
 
 export default function MyPageScreen(props) {
   const {
@@ -21,7 +20,7 @@ export default function MyPageScreen(props) {
     templates
   } = props.screenProps.userData;
 
-  if (!name) return <Spinner style={styles.spinnerContainer} color={'#999999'} />;
+  if (!name) return <LoadingSpinner />;
 
   const infoName = [ '상여금', '보고서', '템플릿' ];
   const userInfo = [ points, reports.length, templates.length ];
@@ -49,15 +48,6 @@ export default function MyPageScreen(props) {
               </View>
             ))}
           </View>
-        </View>
-        <View style={styles.getStartedContainer}>
-          <View
-            style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-          >
-            <MonoText>YAY</MonoText>
-          </View>
-        </View>
-        <View style={styles.helpContainer}>
         </View>
       </ScrollView>
     </View>
@@ -108,7 +98,8 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 1
+    marginBottom: 1,
+    backgroundColor: Colors.lightGray
   },
   info: {
     borderWidth: 1,

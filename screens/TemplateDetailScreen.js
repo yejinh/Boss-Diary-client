@@ -2,21 +2,48 @@ import React from 'react';
 import {
   ScrollView,
   View,
-  Text,
+  Button,
   Image,
+  Text,
+  Alert,
   StyleSheet
 } from 'react-native';
+import Color from '../constants/Colors';
 
 export default function SettingsScreen(props) {
-  const { name, url } = props.navigation.state.params.template;
+  const { navigation } = props;
+  const { name, points, url } = props.navigation.state.params.template;
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        <Image
-          style={styles.templateThum}
-          source={{ uri: url }}
-        />
+        <View style={styles.templateContainer}>
+          <Image
+            style={styles.templateThum}
+            source={{ uri: url }}
+          />
+          <View>
+            <Text>{points} points</Text>
+            <Button
+              onPress={() => {
+                Alert.alert('보고서 추가', `${name}를 구매 하시겠습니까?`,
+                  [
+                    {
+                      text: '구입',
+                      onPress: () => console.log('Ask me later pressed')
+                    },
+                    {
+                      text: '취소',
+                      onPress: () => navigation.navigate('Templates'),
+                      style: 'destructive',
+                    }
+                  ]
+                );
+              }}
+              title='구매하기'
+            />
+          </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -25,7 +52,7 @@ export default function SettingsScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Color.white,
   },
   spinnerContainer: {
     flex: 1,
@@ -39,7 +66,8 @@ const styles = StyleSheet.create({
   },
   templateContainer: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginTop: 20
   },
   templateThum: {
     width: 400,
