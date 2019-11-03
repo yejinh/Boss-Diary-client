@@ -10,3 +10,8 @@ export const fetchUserData = userData => ({
   reports: userData.reports,
   templates: userData.templates
 });
+
+export const fetchTemplates = templates => ({
+  type: actionType.FETCH_TEMPLATES,
+  templates
+});

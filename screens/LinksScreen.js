@@ -14,10 +14,6 @@ export default function LinksScreen() {
   );
 }
 
-LinksScreen.navigationOptions = {
-  title: '보고서 작성하기',
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

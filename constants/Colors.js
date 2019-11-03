@@ -1,6 +1,8 @@
 const tintColor = '#2f95dc';
 
 export default {
+  deepGreen: '#1c2f19',
+  gray: '	#999999',
   tintColor,
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
@@ -12,4 +14,5 @@ export default {
   noticeBackground: tintColor,
   noticeText: '#fff',
   deepGreen: '#1c2f19'
+
 };

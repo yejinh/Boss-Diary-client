@@ -6,7 +6,7 @@ import {
 
 import LoadingScreen from '../screens/LoadingScreen';
 import LoginScreen from '../screens/LoginScreen';
-import SettingStack from './SettingStackNavigator';
+import MyPageStack from './MyPageStackNavigator';
 import MainTab from './MainTabNavigator';
 
 const mainDrawer = createDrawerNavigator(
@@ -14,13 +14,13 @@ const mainDrawer = createDrawerNavigator(
     Main: {
       screen: MainTab,
       navigationOptions: {
-        drawerLabel: 'Main'
+        drawerLabel: '메인 페이지'
       }
     },
     Settings: {
-      screen: SettingStack,
+      screen: MyPageStack,
       navigationOptions: {
-        drawerLabel: 'Settings',
+        drawerLabel: '나의 페이지'
       }
     }
   },
