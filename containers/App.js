@@ -25,9 +25,10 @@ const dispatchFacebookData = dispatch => async(token) => {
       body: JSON.stringify({ email, name, picture })
     });
 
-    const { access_token } = await res.json();
+    const { user_id, access_token } = await res.json();
 
     await SecureStore.setItemAsync('ACCESS_TOKEN', access_token);
+    await SecureStore.setItemAsync('USER_ID', user_id);
 
   } catch(err) {
     Alert.alert('로딩 에러', err.message);
@@ -38,8 +39,9 @@ const dispatchFacebookData = dispatch => async(token) => {
 const dispatchUserData = dispatch => async() => {
   try {
     const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
+    const user_id = await SecureStore.getItemAsync('USER_ID');
 
-    const res = await fetch(`${API_URL}/api/users`, {
+    const res = await fetch(`${API_URL}/api/users/${user_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -77,17 +79,18 @@ const dispatchTemplates = dispatch => async() => {
   }
 };
 
-const dispatchAddTemplate = dispatch => async(userId, templateId, price) => {
+const dispatchAddTemplate = dispatch => async(templateId, price) => {
   try {
     const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
+    const user_id = await SecureStore.getItemAsync('USER_ID');
 
-    const res = await fetch(`${API_URL}/api/users/`, {
+    const res = await fetch(`${API_URL}/api/users/${user_id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${access_token}`
       },
-      body: JSON.stringify({ userId, templateId, price })
+      body: JSON.stringify({ templateId, price })
     });
   } catch(err) {
     Alert.alert('로딩 에러', err.message);
@@ -95,11 +98,12 @@ const dispatchAddTemplate = dispatch => async(userId, templateId, price) => {
   }
 };
 
-const dispatchUserTemplates = dispatch => async(userId) => {
+const dispatchUserTemplates = dispatch => async() => {
   try {
     const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
+    const user_id = await SecureStore.getItemAsync('USER_ID');
 
-    const res = await fetch(`${API_URL}/api/templates/${userId}`, {
+    const res = await fetch(`${API_URL}/api/templates/${user_id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

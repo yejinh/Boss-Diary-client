@@ -3,6 +3,7 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
+import { Button } from 'react-native';
 import BurgerMenu from '../components/BurgerMenu';
 import TabBarIcon from '../components/TabBarIcon';
 
@@ -12,6 +13,7 @@ import ReportsScreen from '../screens/ReportsScreen';
 // new report
 import NewReportScreen from '../screens/NewReportScreen';
 import NewReportInputScreen from '../screens/NewReportInputScreen';
+import NewReportPreviewScreen from '../screens/NewReportPriviewScreen';
 
 // templates
 import TemplatesScreen from '../screens/TemplatesScreen';
@@ -42,7 +44,15 @@ const NewReportStack = createStackNavigator(
     NewReportInput: {
       screen: NewReportInputScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: `${navigation.state.params.template.name} 작성`
+        headerTitle: `${navigation.state.params.template.name} 작성`,
+        headerBackTitle: ' ',
+        headerRight: <Button title='미리보기' onPress={() => navigation.replace('NewReportPreview')} />
+      })
+    },
+    NewReportPreview: {
+      screen: NewReportPreviewScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: '미리보기'
       })
     }
   }
