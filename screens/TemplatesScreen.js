@@ -2,15 +2,13 @@ import React, { useEffect } from 'react';
 import {
   ScrollView,
   View,
-  Text,
-  Image,
-  TouchableOpacity,
   StyleSheet
 } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
+import Template from '../components/Template';
 import Color from '../constants/Colors';
 
-export default function SettingsScreen(props) {
+export default function TemplatesScreen(props) {
   const { navigation } = props;
   const { fetchTemplates, templates } = props.screenProps;
 
@@ -25,18 +23,12 @@ export default function SettingsScreen(props) {
       <ScrollView>
         <View style={styles.templatesContainer}>
           {templates.map(template => (
-            <TouchableOpacity
+            <Template
               key={template._id}
-              onPress={() => navigation.navigate('TemplateDetail', { template: template })}
-            >
-              <View style={styles.templateContainer}>
-                <Image
-                  style={styles.templateThum}
-                  source={{ uri: template.url }}
-                />
-                <Text>{template.name}</Text>
-              </View>
-            </TouchableOpacity>
+              template={template}
+              navigation={navigation}
+              path={'TemplateDetail'}
+            />
           ))}
         </View>
       </ScrollView>
@@ -49,11 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.ultraLightGray,
   },
-  spinnerContainer: {
-    flex: 1,
-    alignContent: 'center',
-    alignItems: 'center'
-  },
   templatesContainer: {
     flex: 1,
     justifyContent: 'space-between',
@@ -62,17 +49,5 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginRight: 10,
     marginLeft: 20,
-  },
-  templateContainer: {
-    flex: 1,
-    alignItems: 'center',
-    marginRight: 10,
-    marginBottom: 20
-  },
-  templateThum: {
-    borderWidth: 0.3,
-    width: 180,
-    height: 280,
-    marginBottom: 10
   }
 });

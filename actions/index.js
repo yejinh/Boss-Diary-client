@@ -2,7 +2,8 @@ import * as actionType from '../constants/actionType';
 
 export const fetchUserData = userData => ({
   type: actionType.FETCH_USER_DATA,
-  userData, userData,
+  userData,
+  userId: userData._id,
   email: userData.email,
   name: userData.name,
   points: userData.points,
@@ -13,5 +14,10 @@ export const fetchUserData = userData => ({
 
 export const fetchTemplates = templates => ({
   type: actionType.FETCH_TEMPLATES,
+  templates
+});
+
+export const fetchUserTemplates = templates => ({
+  type: actionType.FETCH_USER_TEMPLATES,
   templates
 });

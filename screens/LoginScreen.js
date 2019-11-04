@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert
 } from 'react-native';
 import Color from '../constants/Colors';
 
@@ -20,15 +21,16 @@ export default function LoginScreen(props) {
     try {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync(
         FACEBOOK_APP_ID,
-        { permissions: ['public_profile'] }
+        { permissions: ['public_profile', 'email'] }
       );
 
       if (type === 'success') {
         await fetchFacebookData(token);
+
         navigation.navigate('Main');
       }
     } catch(err) {
-      alert(err);
+      console.log(err);
     }
   }
 

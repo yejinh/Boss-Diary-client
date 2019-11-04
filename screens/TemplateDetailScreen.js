@@ -12,7 +12,13 @@ import Color from '../constants/Colors';
 
 export default function SettingsScreen(props) {
   const { navigation } = props;
-  const { name, points, url } = props.navigation.state.params.template;
+  const { onAddTemplate, userData } = props.screenProps;
+  const {
+    _id: templateId,
+    name,
+    points,
+    url
+  } = props.navigation.state.params.template;
 
   return (
     <View style={styles.container}>
@@ -30,7 +36,8 @@ export default function SettingsScreen(props) {
                   [
                     {
                       text: '구입',
-                      onPress: () => console.log('Ask me later pressed')
+                      // 구입 후 alert 띄우고 templates 스크린으로 이동 할 것
+                      onPress: () => onAddTemplate(userData._id, templateId, points)
                     },
                     {
                       text: '취소',

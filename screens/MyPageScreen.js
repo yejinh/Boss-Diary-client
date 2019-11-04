@@ -65,12 +65,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userProfileContainer: {
+    borderWidth: 1,
     flex: 1,
     flexDirection: 'row',
-    marginLeft: 30,
-    marginTop: 20,
-    marginRight: 30,
+    marginLeft: 15,
+    marginTop: 10,
+    marginRight: 15,
     marginBottom: 20,
+    paddingLeft: 15,
+    paddingTop: 10,
+    paddingRight: 15,
+    paddingBottom: 10
   },
   userProfile: {
     alignItems: 'center',

@@ -4,11 +4,17 @@ import {
   createBottomTabNavigator
 } from 'react-navigation';
 import BurgerMenu from '../components/BurgerMenu';
-
 import TabBarIcon from '../components/TabBarIcon';
+
+// reports
 import ReportsScreen from '../screens/ReportsScreen';
-import LinksScreen from '../screens/LinksScreen';
-import TemplateScreen from '../screens/TemplateScreen';
+
+// new report
+import NewReportScreen from '../screens/NewReportScreen';
+import NewReportInputScreen from '../screens/NewReportInputScreen';
+
+// templates
+import TemplatesScreen from '../screens/TemplatesScreen';
 import TemplateDetailScreen from '../screens/TemplateDetailScreen';
 
 const ReportsStack = createStackNavigator(
@@ -26,10 +32,17 @@ const ReportsStack = createStackNavigator(
 const NewReportStack = createStackNavigator(
   {
     NewReport: {
-      screen: LinksScreen,
+      screen: NewReportScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: '보고서 작성하기',
+        headerTitle: '보고서 작성',
+        headerBackTitle: ' ',
         headerLeft: () => <BurgerMenu nav = {navigation} />
+      })
+    },
+    NewReportInput: {
+      screen: NewReportInputScreen,
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: `${navigation.state.params.template.name} 작성`
       })
     }
   }
@@ -38,9 +51,9 @@ const NewReportStack = createStackNavigator(
 const TemplatesStack = createStackNavigator(
   {
     Templates: {
-      screen: TemplateScreen,
+      screen: TemplatesScreen,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: '템플릿 구매하기',
+        headerTitle: '템플릿 구매',
         headerBackTitle: ' ',
         headerLeft: () => <BurgerMenu nav = {navigation} />
       })
@@ -92,6 +105,6 @@ const MainTab = createBottomTabNavigator({
   ReportsStack,
   NewReportStack,
   TemplatesStack
-}, { initialRouteName: 'TemplatesStack' });
+}, { initialRouteName: 'NewReportStack' });
 
 export default MainTab;
