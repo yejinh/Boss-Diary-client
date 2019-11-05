@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import * as SecureStore from 'expo-secure-store';
 import * as Font from 'expo-font';
+import { Asset } from 'expo-asset';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function LoadingScreen(props) {
@@ -15,6 +16,10 @@ export default function LoadingScreen(props) {
     try {
       await Promise.all([
         Font.loadAsync({
+          'myeongjo': require('../assets/fonts/JejuMyeongjo.ttf'),
+          'batang': require('../assets/fonts/IropkeBatangM.ttf'),
+          'euljiro': require('../assets/fonts/BMEULJIRO.otf'),
+          'yeonsung': require('../assets/fonts/BMYEONSUNG_otf.otf'),
           ...Ionicons.font,
         }),
         Permissions.askAsync(

@@ -103,7 +103,7 @@ const dispatchUserTemplates = dispatch => async() => {
     const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
     const user_id = await SecureStore.getItemAsync('USER_ID');
 
-    const res = await fetch(`${API_URL}/api/templates/${user_id}`, {
+    const res = await fetch(`${API_URL}/api/users/${user_id}/templates`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

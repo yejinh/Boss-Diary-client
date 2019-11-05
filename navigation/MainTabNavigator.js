@@ -45,8 +45,7 @@ const NewReportStack = createStackNavigator(
       screen: NewReportInputScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: `${navigation.state.params.template.name} 작성`,
-        headerBackTitle: ' ',
-        headerRight: <Button title='미리보기' onPress={() => navigation.replace('NewReportPreview')} />
+        headerBackTitle: ' '
       })
     },
     NewReportPreview: {
