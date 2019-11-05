@@ -3,7 +3,6 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
-import { Button } from 'react-native';
 import BurgerMenu from '../components/BurgerMenu';
 import TabBarIcon from '../components/TabBarIcon';
 

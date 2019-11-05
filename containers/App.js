@@ -12,12 +12,13 @@ import {
 
 const { API_URL } = getEnvVars();
 
+const getAccessToken = async() => await SecureStore.getItemAsync('ACCESS_TOKEN');
+const getUserId = async() => await SecureStore.getItemAsync('USER_ID');
+
 const dispatchFacebookData = dispatch => async(token) => {
   try {
     const FBres = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=email,name,picture.type(large)`);
     const { name, email, picture } = await FBres.json();
-
-    Alert.alert('로그인', `안녕하세요, ${name} 부장님`);
 
     const res = await fetch(`${API_URL}/api/auth/authenticate`, {
       method: 'POST',
@@ -30,22 +31,24 @@ const dispatchFacebookData = dispatch => async(token) => {
     await SecureStore.setItemAsync('ACCESS_TOKEN', access_token);
     await SecureStore.setItemAsync('USER_ID', user_id);
 
+    Alert.alert('로그인', `안녕하세요, ${name} 부장님`);
+
   } catch(err) {
-    Alert.alert('로딩 에러', err.message);
+    Alert.alert('로그인 에러', err.message);
     console.log(err);
   }
 };
 
 const dispatchUserData = dispatch => async() => {
   try {
-    const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
-    const user_id = await SecureStore.getItemAsync('USER_ID');
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${user_id}`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${accessToken}`
       }
     });
 
@@ -53,20 +56,20 @@ const dispatchUserData = dispatch => async() => {
 
     dispatch(fetchUserData(userData));
   } catch(err) {
-    Alert.alert('로딩 에러', err.message);
+    Alert.alert('사용자 정보 로딩 에러', err.message);
     console.log(err);
   }
 };
 
 const dispatchTemplates = dispatch => async() => {
   try {
-    const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
+    const accessToken = await getAccessToken()
 
     const res = await fetch(`${API_URL}/api/templates`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${accessToken}`
       }
     });
 
@@ -74,40 +77,40 @@ const dispatchTemplates = dispatch => async() => {
 
     dispatch(fetchTemplates(templates));
   } catch(err) {
-    Alert.alert('로딩 에러', err.message);
+    Alert.alert('템플릿 로딩 에러', err.message);
     console.log(err);
   }
 };
 
-const dispatchAddTemplate = dispatch => async(templateId, price) => {
+const dispatchTemplateAdd = dispatch => async(templateId, price) => {
   try {
-    const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
-    const user_id = await SecureStore.getItemAsync('USER_ID');
+    const accessToken = await getAccessToken()
+    const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${user_id}`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${accessToken}`
       },
       body: JSON.stringify({ templateId, price })
     });
   } catch(err) {
-    Alert.alert('로딩 에러', err.message);
+    Alert.alert('템플릿 구입 에러', err.message);
     console.log(err);
   }
 };
 
 const dispatchUserTemplates = dispatch => async() => {
   try {
-    const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
-    const user_id = await SecureStore.getItemAsync('USER_ID');
+    const accessToken = await getAccessToken()
+    const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${user_id}/templates`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}/templates`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`
+        Authorization: `Bearer ${accessToken}`
       }
     });
 
@@ -115,7 +118,28 @@ const dispatchUserTemplates = dispatch => async() => {
 
     dispatch(fetchUserTemplates(templates));
   } catch(err) {
-    Alert.alert('로딩 에러', err.message);
+    Alert.alert('보고서 템플릿 로딩 에러', err.message);
+    console.log(err);
+  }
+};
+
+const dispatchReportSubmit = dispatch => async(text, reportUrl, templateId) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+
+    const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
+      method: 'POST',
+       headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      },
+      body: JSON.stringify({ text, reportUrl, templateId })
+    });
+
+
+  } catch(err) {
+    Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
   }
 }
@@ -131,7 +155,8 @@ const mapDispatchToProps = dispatch => ({
   fetchUserData: dispatchUserData(dispatch),
   fetchTemplates: dispatchTemplates(dispatch),
   fetchUserTemplates: dispatchUserTemplates(dispatch),
-  onAddTemplate: dispatchAddTemplate(dispatch)
+  onTemplateAdd: dispatchTemplateAdd(dispatch),
+  onReportSubmit: dispatchReportSubmit(dispatch)
 });
 
 const AppContainer = props => {

@@ -12,7 +12,7 @@ import Color from '../constants/Colors';
 
 export default function SettingsScreen(props) {
   const { navigation } = props;
-  const { onAddTemplate } = props.screenProps;
+  const { onTemplateAdd } = props.screenProps;
   const {
     _id: templateId,
     name,
@@ -37,7 +37,7 @@ export default function SettingsScreen(props) {
                     {
                       text: '구입',
                       onPress: () => {
-                        onAddTemplate(templateId, points);
+                        onTemplateAdd(templateId, points);
                         Alert.alert('보고서 구입 완료', `${name}를 구입 하였습니다`);
                         navigation.navigate('Templates');
                       }
