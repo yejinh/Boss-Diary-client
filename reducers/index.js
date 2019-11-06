@@ -1,9 +1,10 @@
 import * as actionTypes from '../constants/actionType';
 const initialState = {
   userData: null,
-  userId: null,
+  profilePhoto: null,
+  userReports: [],
+  userTemplates: [],
   templates: [],
-  userTemplates: []
 };
 
 function reducer(state = initialState, action) {
@@ -12,19 +13,25 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         userData: action.userData,
-        userId: action.userId
+        profilePhoto: action.profilePhoto
+      };
+
+    case actionTypes.FETCH_USER_REPORTS:
+      return {
+        ...state,
+        userReports: action.reports
+      }
+
+    case actionTypes.FETCH_USER_TEMPLATES:
+      return {
+        ...state,
+        userTemplates: action.templates
       };
 
     case actionTypes.FETCH_TEMPLATES:
       return {
         ...state,
         templates: action.templates
-      };
-
-    case actionTypes.FETCH_USER_TEMPLATES:
-      return {
-        ...state,
-        userTemplates: action.templates
       };
 
     default:

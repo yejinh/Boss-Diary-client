@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
   },
   templateThum: {
     borderWidth: 0.3,
-    width: 180,
-    height: 280,
+    width: 160,
+    height: 240,
     marginBottom: 10
   }
 });

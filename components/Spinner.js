@@ -4,9 +4,7 @@ import { StyleSheet } from 'react-native';
 import Color from '../constants/Colors';
 
 export default function LoadingSpinner() {
-  return (
-    <Spinner style={styles.spinnerContainer} color={Color.gray} />
-  );
+  return <Spinner style={styles.spinnerContainer} color={Color.gray} />;
 }
 
 const styles = StyleSheet.create({

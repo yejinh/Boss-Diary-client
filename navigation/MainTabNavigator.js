@@ -113,6 +113,6 @@ const MainTab = createBottomTabNavigator({
   ReportsStack,
   NewReportStack,
   TemplatesStack
-}, { initialRouteName: 'NewReportStack' });
+}, { initialRouteName: 'ReportsStack'});
 
 export default MainTab;

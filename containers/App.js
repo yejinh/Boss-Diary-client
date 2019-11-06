@@ -6,8 +6,9 @@ import AppNavigator from '../navigation/AppNavigator';
 import getEnvVars from '../environment';
 import {
   fetchUserData,
-  fetchTemplates,
-  fetchUserTemplates
+  fetchUserReports,
+  fetchUserTemplates,
+  fetchTemplates
 } from '../actions';
 
 const { API_URL } = getEnvVars();
@@ -32,7 +33,6 @@ const dispatchFacebookData = dispatch => async(token) => {
     await SecureStore.setItemAsync('USER_ID', user_id);
 
     Alert.alert('로그인', `안녕하세요, ${name} 부장님`);
-
   } catch(err) {
     Alert.alert('로그인 에러', err.message);
     console.log(err);
@@ -60,6 +60,29 @@ const dispatchUserData = dispatch => async() => {
     console.log(err);
   }
 };
+
+const dispatchUserReports = dispatch => async() => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+
+    const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { reports } = await res.json();
+    reports.reverse();
+
+    dispatch(fetchUserReports(reports));
+  } catch(err) {
+    Alert.alert('보고서 로딩 에러', err.message);
+    console.log(err);
+  }
+}
 
 const dispatchTemplates = dispatch => async() => {
   try {
@@ -135,7 +158,7 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
     data.append('templateId', templateId);
     data.append('date', new Date().toISOString());
 
-    const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
+    await fetch(`${API_URL}/api/users/${userId}/reports`, {
       method: 'POST',
        headers: {
         'Content-Type': 'multipart/form-data',
@@ -143,8 +166,6 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
       },
       body: data
     });
-
-    console.log(await res.json());
   } catch(err) {
     Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
@@ -153,13 +174,16 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
 
 const mapStateToProps = state => ({
   userData: state.userData,
-  templates: state.templates,
-  userTemplates: state. userTemplates
+  profilePhoto: state.profilePhoto,
+  userReports: state.userReports,
+  userTemplates: state. userTemplates,
+  templates: state.templates
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchFacebookData: dispatchFacebookData(dispatch),
   fetchUserData: dispatchUserData(dispatch),
+  fetchUserReports: dispatchUserReports(dispatch),
   fetchTemplates: dispatchTemplates(dispatch),
   fetchUserTemplates: dispatchUserTemplates(dispatch),
   onTemplateAdd: dispatchTemplateAdd(dispatch),

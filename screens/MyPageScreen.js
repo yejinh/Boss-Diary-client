@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Image,
   Platform,
@@ -8,10 +8,11 @@ import {
   View
 } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
-import { MonoText } from '../components/StyledText';
 import Colors from '../constants/Colors';
 
 export default function MyPageScreen(props) {
+  const { navigation } = props;
+  const { fetchUserData } = props.screenProps;
   const {
     name,
     profilePhoto,
@@ -19,6 +20,10 @@ export default function MyPageScreen(props) {
     reports,
     templates
   } = props.screenProps.userData;
+
+  useEffect(() => {
+    navigation.addListener('didFocus', () => fetchUserData());
+  }, []);
 
   if (!name) return <LoadingSpinner />;
 
@@ -78,15 +83,16 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   userProfile: {
+    flex: 1,
     alignItems: 'center',
   },
   userPhoto: {
-    width: 90,
-    height: 90,
+    width: 70,
+    height: 70,
     borderRadius: 10
   },
   userInfo: {
-    flex: 3,
+    flex: 2,
     flexDirection: 'row',
     marginLeft: 30,
     marginTop: 5,

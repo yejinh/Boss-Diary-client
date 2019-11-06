@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ScrollView,
   View,
@@ -6,17 +6,29 @@ import {
 } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
 import Template from '../components/Template';
+import EmptyScreen from '../components/EmptyScreen';
 import Color from '../constants/Colors';
 
 export default function NewReportScreen(props) {
+  const [ isFetched, setIsFetched ] = useState(false);
+
   const { navigation } = props;
   const { userData, userTemplates, fetchUserTemplates } = props.screenProps;
 
-  if (!userData) return <LoadingSpinner />;
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchUserTemplates(userData._id);
+      setIsFetched(true);
+    };
+    fetchData();
+  }, [ userData ]);
 
   useEffect(() => {
-    fetchUserTemplates(userData._id);
-  }, [ userData ]);
+    return setIsFetched(false);
+  });
+
+  if (!userTemplates.length && !isFetched) return <LoadingSpinner />;
+  if (!userTemplates.length) return <EmptyScreen message={'보유한 템플릿이 없습니다'}/>;
 
   return (
     <View style={styles.container}>

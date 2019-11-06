@@ -45,7 +45,7 @@ export default function LoadingScreen(props) {
         const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
 
         if (access_token) {
-          fetchUserData();
+          await fetchUserData();
 
           return navigation.navigate('App');
         }
