@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { captureRef } from 'react-native-view-shot';
 import {
   ImageBackground,
-  CameraRoll,
   Alert,
   Button,
   StyleSheet
@@ -23,18 +22,39 @@ export default function NewReportInputScreen(props) {
   const [ fontFamily, setFontFamily ] = useState('myeongjo');
   const screen = useRef(null);
 
+  const { navigation } = props;
   const { onReportSubmit } = props.screenProps;
   const { text, template } = props.navigation.state.params;
 
   const submit = async() => {
     const data = await captureRef(screen, {
-      result: 'base64',
       format: 'jpg',
       quality: 0.8,
     });
 
-    console.log(data);
-    onReportSubmit(text, url, template._id);
+    const photo = {
+      uri: data,
+      name: 'new-photo.jpg',
+      type: 'multipart/form-data',
+    };
+
+    onReportSubmit(text, photo, template._id);
+
+    Alert.alert(
+      '보고서 제출',
+      `${template.name} 제출을 완료하였습니다`,
+      [
+        {
+          text: '보고서 페이지 이동',
+          onPress: () => navigation.navigate('Report')
+        },
+        {
+          text: '새로운 보고서 작성',
+          onPress: () => navigation.navigate('NewReport')
+        }
+      ]
+    );
+    navigation.navigate('Reports');
   };
 
   return (
@@ -88,7 +108,7 @@ export default function NewReportInputScreen(props) {
           title='저장하기'
           onPress={() => Alert.alert(
             '보고서 제출',
-            `${template.name}를 제출하시겠습니까?`,
+            `${template.name}를 제출 하시겠습니까?`,
             [
               {
                 text: '제출',

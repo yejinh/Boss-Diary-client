@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
-import { Container, View, Fab, Button, Icon, Text } from 'native-base';
+import {
+  Container,
+  View,
+  Fab,
+  Button,
+  Icon,
+  Text
+} from 'native-base';
 import Colors from '../constants/Colors';
 
 export default function NewReportInputScreen(props) {
   const [ isActive,  setIsActive ] = useState(false);
   // 여기서 나의 레포트들 보여주고 선택 시 사진첩 공유 가능하도록.
+  // CameraRoll.saveToCameraRoll(url, 'photo');
   return (
     <Container>
       <View style={{ flex: 1 }}>

@@ -95,6 +95,7 @@ const dispatchTemplateAdd = dispatch => async(templateId, price) => {
       },
       body: JSON.stringify({ templateId, price })
     });
+
   } catch(err) {
     Alert.alert('템플릿 구입 에러', err.message);
     console.log(err);
@@ -123,21 +124,27 @@ const dispatchUserTemplates = dispatch => async() => {
   }
 };
 
-const dispatchReportSubmit = dispatch => async(text, reportUrl, templateId) => {
+const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
   try {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
+    const data = new FormData();
+
+    data.append('photo', reportUri);
+    data.append('text', text);
+    data.append('templateId', templateId);
+    data.append('date', new Date().toISOString());
 
     const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
       method: 'POST',
        headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       },
-      body: JSON.stringify({ text, reportUrl, templateId })
+      body: data
     });
 
-
+    console.log(await res.json());
   } catch(err) {
     Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
