@@ -2,7 +2,6 @@ import * as actionTypes from '../constants/actionType';
 const initialState = {
   userData: null,
   profilePhoto: null,
-  userReports: [],
   userTemplates: [],
   templates: [],
 };
@@ -15,12 +14,6 @@ function reducer(state = initialState, action) {
         userData: action.userData,
         profilePhoto: action.profilePhoto
       };
-
-    case actionTypes.FETCH_USER_REPORTS:
-      return {
-        ...state,
-        userReports: action.reports
-      }
 
     case actionTypes.FETCH_USER_TEMPLATES:
       return {

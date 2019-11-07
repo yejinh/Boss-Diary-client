@@ -6,7 +6,6 @@ import AppNavigator from '../navigation/AppNavigator';
 import getEnvVars from '../environment';
 import {
   fetchUserData,
-  fetchUserReports,
   fetchUserTemplates,
   fetchTemplates
 } from '../actions';
@@ -76,12 +75,7 @@ const dispatchUserReports = dispatch => async(pageNumber) => {
 
     const { reports } = await res.json();
 
-    if (!reports) {
-      return Alert.alert('빈 보고서', '보고서를 작성하세요');
-    }
-
-    dispatch(fetchUserReports(reports));
-    return;
+    return reports;
   } catch(err) {
     Alert.alert('보고서 로딩 에러', err.message);
     console.log(err);
@@ -179,7 +173,6 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
 const mapStateToProps = state => ({
   userData: state.userData,
   profilePhoto: state.profilePhoto,
-  userReports: state.userReports,
   userTemplates: state. userTemplates,
   templates: state.templates
 });

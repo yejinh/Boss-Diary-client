@@ -1,95 +1,130 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, FlatList, View, StyleSheet } from 'react-native';
+import React, { Component } from 'react';
+import { SafeAreaView, FlatList, Alert } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
 import Report from '../components/Report';
 import EmptyScreen from '../components/EmptyScreen';
-import Colors from '../constants/Colors';
 
-export default function NewReportInputScreen(props) {
-  const [ pageNumber, setPageNumber ] = useState(1);
-  const [ isFetched, setIsFetched ] = useState(false);
-  const [ isLoading, setIsLoading ] = useState(false);
+export default class NewReportInputScreen extends Component {
+  constructor(props) {
+    super(props);
 
-  const { navigation } = props;
-  const { profilePhoto, userReports, fetchUserReports } = props.screenProps;
+    this.state = {
+      reports: [],
+      pageNumber: 1,
+      isLoading: false,
+      isRefreshing: false,
+      isAllLoaded: false
+    };
+  }
 
-  const didFocus = navigation.addListener('didFocus', async() => {
-    await fetchUserReports(pageNumber);
-    setIsFetched(true);
-  });
+  componentDidMount() {
+    this.subs = [
+      this.props.navigation.addListener('didFocus', () => {
+        this.setState({
+          isLoading: true
+        });
+        this._loadMoreReports();
+      }),
 
-  const _loadMoreReports = async() => {
+      this.props.navigation.addListener('willBlur', () => {
+        this.setState({
+          pageNumber: 1
+        });
+      })
+    ];
+  }
+
+
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
+  }
+
+  _loadMoreReports = async() => {
     try {
-      setIsLoading(true);
+      const { fetchUserReports } = this.props.screenProps;
+      const { pageNumber, reports } = this.state;
 
-      await fetchUserReports(pageNumber);
+      const fetchedReports = await fetchUserReports(pageNumber);
 
-      setIsLoading(false);
+      if (!fetchedReports.length) {
+        this.setState({
+          isLoading: false,
+          isAllLoaded: true
+        });
+
+        if (pageNumber === 1) {
+          return Alert.alert('빈 보고서', '보고서를 작성하세요');
+        }
+        return;
+      }
+
+      this.setState({
+        pageNumber: pageNumber + 1,
+        reports: reports.concat(fetchedReports),
+        isLoading: false
+      });
     } catch(err) {
-      setIsLoading(false);
-      console.log(err);
+      this.setState({
+        isLoading: false
+      });
+    }
+  }
+
+  _refresh = async() => {
+    try {
+      const reports = await fetchUserReports(1);
+
+      this.setState({
+        pageNumber: 2,
+        reports: reports,
+        isRefreshing: false
+      });
+    } catch(err) {
+      this.setState({
+        pageNumber: 2,
+        isRefreshing: false
+      });
     }
   };
 
-  const _refresh = () => {
-    setPageNumber(1);
-    _loadMoreReports();
+  _footerSpinner = () => {
+    if (this.state.isLoading) {
+      return <LoadingSpinner />;
+    }
+    return null;
   };
 
-  useEffect(() => {
-    return () => didFocus.remove();
-  });
+  render() {
+    const { reports, isRefreshing, isAllLoaded } = this.state;
+    const { profilePhoto } = this.props.screenProps;
 
-  if (!userReports.length && !isFetched) return <LoadingSpinner />;
-  if (!userReports.length) return <EmptyScreen message={'작성한 보고서가 없습니다'}/>;
-
-  // 여기서 나의 레포트들 보여주고 선택 시 사진첩 공유 가능하도록.
-  // CameraRoll.saveToCameraRoll(url, 'photo');
-
-  console.log(userReports);
-  return (
-    <SafeAreaView>
-      <FlatList
-        data={userReports}
-        keyExtractor={item => item._id}
-        refreshing={isLoading}
-        onRefresh={_refresh}
-        onEndReachedThreshold={0.05}
-        onEndReached={() => {
-          setPageNumber(pageNumber + 1);
-          _loadMoreReports();
-        }}
-        renderItem={({ item }) => (
-          <Report
-            key={item}
-            profilePhoto={profilePhoto}
-            report={item}
-          />
-        )}
-      />
-    </SafeAreaView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    resizeMode: 'cover'
-  },
-  cardContainer: {
-    flex: 1,
-    flexWrap: 'wrap'
-  },
-  fabContainer: {
-    flex: 1
-  },
-  mainFab: {
-    backgroundColor: Colors.gray
-  },
-  fab: {
-    backgroundColor: Colors.deepGreen
-  },
-  text: {
-    fontSize: 12
+    return (
+      <SafeAreaView>
+        <FlatList
+          data={reports}
+          keyExtractor={item => item._id}
+          refreshing={isRefreshing}
+          onRefresh={() => {
+            this.setState({ isRefreshing : true });
+            this._refresh();
+          }}
+          onEndReachedThreshold={0.05}
+          onEndReached={() => {
+            if (!isAllLoaded) {
+              this.setState({ isLoading: true });
+              this._loadMoreReports();
+            }
+          }}
+          ListFooterComponent={this._footerSpinner}
+          renderItem={({ item }) => (
+            <Report
+              key={item._id}
+              profilePhoto={profilePhoto}
+              report={item}
+            />
+          )}
+        />
+      </SafeAreaView>
+    );
   }
-});
+}
