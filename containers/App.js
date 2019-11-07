@@ -61,12 +61,12 @@ const dispatchUserData = dispatch => async() => {
   }
 };
 
-const dispatchUserReports = dispatch => async() => {
+const dispatchUserReports = dispatch => async(pageNumber) => {
   try {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}/reports?page_number=${pageNumber}&page_size=2`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -75,9 +75,13 @@ const dispatchUserReports = dispatch => async() => {
     });
 
     const { reports } = await res.json();
-    reports.reverse();
+
+    if (!reports) {
+      return Alert.alert('빈 보고서', '보고서를 작성하세요');
+    }
 
     dispatch(fetchUserReports(reports));
+    return;
   } catch(err) {
     Alert.alert('보고서 로딩 에러', err.message);
     console.log(err);
@@ -86,7 +90,7 @@ const dispatchUserReports = dispatch => async() => {
 
 const dispatchTemplates = dispatch => async() => {
   try {
-    const accessToken = await getAccessToken()
+    const accessToken = await getAccessToken();
 
     const res = await fetch(`${API_URL}/api/templates`, {
       method: 'GET',

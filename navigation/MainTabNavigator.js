@@ -5,6 +5,7 @@ import {
 } from 'react-navigation';
 import BurgerMenu from '../components/BurgerMenu';
 import TabBarIcon from '../components/TabBarIcon';
+import Colors from '../constants/Colors';
 
 // reports
 import ReportsScreen from '../screens/ReportsScreen';
@@ -81,6 +82,10 @@ const TemplatesStack = createStackNavigator(
 
 ReportsStack.navigationOptions = {
   tabBarLabel: '보고서',
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.gray
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -91,6 +96,10 @@ ReportsStack.navigationOptions = {
 
 NewReportStack.navigationOptions = {
   tabBarLabel: '작성하기',
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.gray
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -101,6 +110,10 @@ NewReportStack.navigationOptions = {
 
 TemplatesStack.navigationOptions = {
   tabBarLabel: '드림 디포',
+  tabBarOptions: {
+    activeTintColor: Colors.tintColor,
+    inactiveTintColor: Colors.gray
+  },
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -109,10 +122,15 @@ TemplatesStack.navigationOptions = {
   )
 };
 
-const MainTab = createBottomTabNavigator({
-  ReportsStack,
-  NewReportStack,
-  TemplatesStack
-}, { initialRouteName: 'ReportsStack'});
+const MainTab = createBottomTabNavigator(
+  {
+    ReportsStack,
+    NewReportStack,
+    TemplatesStack
+  },
+  {
+    initialRouteName: 'ReportsStack',
+  }
+);
 
 export default MainTab;

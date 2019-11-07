@@ -7,7 +7,7 @@ export const fetchUserData = userData => ({
   email: userData.email,
   name: userData.name,
   points: userData.points,
-  profilePhoto: userData.profilePhoto,
+  profilePhoto: userData.profile_photo,
   reports: userData.reports,
   templates: userData.templates
 });

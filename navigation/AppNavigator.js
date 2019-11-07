@@ -9,6 +9,8 @@ import LoginScreen from '../screens/LoginScreen';
 import MyPageStack from './MyPageStackNavigator';
 import MainTab from './MainTabNavigator';
 
+import Colors from '../constants/Colors';
+
 const mainDrawer = createDrawerNavigator(
   {
     Main: {

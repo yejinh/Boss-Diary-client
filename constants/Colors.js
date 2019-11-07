@@ -1,5 +1,5 @@
-const tintColor = '#2f95dc';
-// const tintColor = '#1c2f19';
+// const tintColor = '#2f95dc';
+const tintColor = '#1c2f19';
 
 export default {
   deepGreen: '#1c2f19',

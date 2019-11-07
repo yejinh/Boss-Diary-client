@@ -15,16 +15,13 @@ export default function NewReportScreen(props) {
   const { navigation } = props;
   const { userData, userTemplates, fetchUserTemplates } = props.screenProps;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchUserTemplates(userData._id);
-      setIsFetched(true);
-    };
-    fetchData();
-  }, [ userData ]);
+  const didFocus = navigation.addListener('didFocus', async() => {
+    await fetchUserTemplates(userData._id);
+    setIsFetched(true);
+  });
 
   useEffect(() => {
-    return setIsFetched(false);
+    return () => didFocus.remove();
   });
 
   if (!userTemplates.length && !isFetched) return <LoadingSpinner />;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 import {
   Container,
   Header,
@@ -21,10 +21,9 @@ export default function Report(props) {
   const { title, created_at: createdAt, url } = report;
 
   return (
-    <Container>
-      <Header />
+    <Container style={styles.container}>
       <Content>
-        <Card>
+        <Card style={styles.cardContainer}>
           <CardItem>
             <Left>
               <Thumbnail source={{ uri: profilePhoto }} />
@@ -34,20 +33,14 @@ export default function Report(props) {
               </Body>
             </Left>
           </CardItem>
-          <CardItem cardBody>
-            <Image source={{ uri: url }} style={{ height: 200, width: null, flex: 1 }}/>
+          <CardItem cardBody style={styles.cardBody}>
+            <Image source={{ uri: url }} style={styles.image}/>
           </CardItem>
           <CardItem>
             <Left>
               <Button transparent>
-                <Icon active name="thumbs-up" />
+                <Icon active name='thumbs-up' />
                 <Text>12 Likes</Text>
-              </Button>
-            </Left>
-            <Left>
-              <Button transparent>
-                <Icon active name="chatbubbles" />
-                <Text>4 Comments</Text>
               </Button>
             </Left>
           </CardItem>
@@ -56,3 +49,20 @@ export default function Report(props) {
     </Container>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 650
+  },
+  cardContainer: {
+    borderWidth: 1
+  },
+  cardBody: {
+    height: 500
+  },
+  image: {
+    flex: 1,
+    height: 500,
+    width: null
+  }
+});

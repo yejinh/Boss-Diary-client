@@ -41,12 +41,12 @@ export default function NewReportInputScreen(props) {
     onReportSubmit(text, photo, template._id);
 
     Alert.alert(
-      '보고서 제출',
+      '보고서 제출 완료',
       `${template.name} 제출을 완료하였습니다`,
       [
         {
           text: '보고서 페이지 이동',
-          onPress: () => navigation.navigate('Report')
+          onPress: () => navigation.navigate('ReportsStack')
         },
         {
           text: '새로운 보고서 작성',
@@ -54,7 +54,6 @@ export default function NewReportInputScreen(props) {
         }
       ]
     );
-    navigation.navigate('Reports');
   };
 
   return (

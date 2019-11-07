@@ -21,9 +21,15 @@ export default function MyPageScreen(props) {
     templates
   } = props.screenProps.userData;
 
+  const didFocus = navigation.addListener('didFocus', () => {
+    fetchUserData()
+  });
+
   useEffect(() => {
-    navigation.addListener('didFocus', () => fetchUserData());
-  }, []);
+    return () => didFocus.remove();
+  });
+
+  console.log('my screen');
 
   if (!name) return <LoadingSpinner />;
 
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userProfileContainer: {
-    borderWidth: 1,
+    // borderWidth: 1,
     flex: 1,
     flexDirection: 'row',
     marginLeft: 15,
@@ -92,16 +98,16 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   userInfo: {
-    flex: 2,
+    flex: 3,
     flexDirection: 'row',
     marginLeft: 30,
-    marginTop: 5,
-    marginBottom: 20
+    marginTop: 3,
+    marginBottom: 15
   },
   infoContent: {
     flex: 1,
     alignItems: 'center',
-    width: 85
+    width: 90
   },
   infoName: {
     borderWidth: 1,
