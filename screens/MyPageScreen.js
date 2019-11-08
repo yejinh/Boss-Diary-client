@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import {
   Image,
-  Platform,
   ScrollView,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
+import Calendar from '../components/Calendar';
 import Colors from '../constants/Colors';
 
 export default function MyPageScreen(props) {
@@ -28,8 +28,6 @@ export default function MyPageScreen(props) {
   useEffect(() => {
     return () => didFocus.remove();
   });
-
-  console.log('my screen');
 
   if (!name) return <LoadingSpinner />;
 
@@ -60,6 +58,9 @@ export default function MyPageScreen(props) {
             ))}
           </View>
         </View>
+        <View>
+          <Calendar />
+        </View>
       </ScrollView>
     </View>
   );
@@ -76,17 +77,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   userProfileContainer: {
-    // borderWidth: 1,
+    borderBottomWidth: 0.3,
     flex: 1,
     flexDirection: 'row',
     marginLeft: 15,
-    marginTop: 10,
+    marginTop: 20,
     marginRight: 15,
     marginBottom: 20,
     paddingLeft: 15,
     paddingTop: 10,
     paddingRight: 15,
-    paddingBottom: 10
+    paddingBottom: 20
   },
   userProfile: {
     flex: 1,
@@ -128,46 +129,5 @@ const styles = StyleSheet.create({
   infoText: {
     fontSize: 18,
     fontWeight: '500'
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
   }
 });

@@ -4,7 +4,7 @@ import LoadingSpinner from '../components/Spinner';
 import Report from '../components/Report';
 import EmptyScreen from '../components/EmptyScreen';
 
-export default class NewReportInputScreen extends Component {
+export default class ReportsScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -28,7 +28,8 @@ export default class NewReportInputScreen extends Component {
 
       this.props.navigation.addListener('willBlur', () => {
         this.setState({
-          pageNumber: 1
+          pageNumber: 1,
+          reports: []
         });
       })
     ];

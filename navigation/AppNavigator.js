@@ -27,7 +27,7 @@ const mainDrawer = createDrawerNavigator(
     }
   },
   {
-    initialRouteName: 'Main'
+    initialRouteName: 'Settings'
   }
 );
 

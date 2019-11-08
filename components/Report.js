@@ -11,7 +11,7 @@ import {
   Left,
   Body
 } from 'native-base';
-import { getDate } from '../utils';
+import { getDetailDate } from '../utils';
 
 export default function Report(props) {
   const { profilePhoto, report } = props;
@@ -25,7 +25,7 @@ export default function Report(props) {
             <Thumbnail source={{ uri: profilePhoto }} />
             <Body>
               <Text>{title}</Text>
-              <Text note>{getDate(createdAt)}</Text>
+              <Text note>{getDetailDate(createdAt)}</Text>
             </Body>
           </Left>
         </CardItem>

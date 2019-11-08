@@ -23,7 +23,8 @@ export default function LoadingScreen(props) {
           ...Ionicons.font,
         }),
         Permissions.askAsync(
-          Permissions.CAMERA
+          Permissions.CAMERA,
+          Permissions.CALENDAR
         )
       ]);
 

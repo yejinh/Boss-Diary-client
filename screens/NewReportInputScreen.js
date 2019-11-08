@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  ScrollView,
   ImageBackground,
   View,
   Button,
@@ -7,15 +8,14 @@ import {
   StyleSheet
 } from 'react-native';
 import { Form, Textarea } from 'native-base';
-import Color from '../constants/Colors';
 
 export default function NewReportInputScreen(props) {
-  const [ text, onChangeText ] = React.useState('안녕하세요 만나서 반가워요 이것은 보고서입니다. 보고서라구요 보고서보고서');
+  const [ text, onChangeText ] = React.useState('라떼는 말이야...');
 
   const { navigation } = props;
   const { template } = props.navigation.state.params;
   const onPreviewClick = () => {
-    if (text.length < 30) {
+    if (text.length < 10) {
       return Alert.alert('작성', '보고서를 30자 이상 작성해 주세요');
     }
 
@@ -23,20 +23,26 @@ export default function NewReportInputScreen(props) {
   };
 
   return (
-    <ImageBackground
+    <ScrollView
       style={styles.container}
-      source={{ uri: template.url }}
+      contentContainerStyle={styles.contentContainer}
+      keyboardShouldPersistTaps='never'
     >
-      <Form>
-        <Textarea
-          style={styles.inputContainer}
-          onChangeText={text => onChangeText(text)}
-          placeholder='작성하세요'
-          maxLength={100}
-          multiline={true}
-          value={text}
-        />
-      </Form>
+      <ImageBackground
+        style={styles.imageContainer}
+        source={{ uri: template.url }}
+      >
+        <Form>
+          <Textarea
+            style={styles.inputContainer}
+            onChangeText={text => onChangeText(text)}
+            placeholder='작성하세요'
+            maxLength={100}
+            multiline={true}
+            value={text}
+          />
+        </Form>
+      </ImageBackground>
       <View style={styles.bottom}>
         <Button
           style={styles.previewButton}
@@ -44,25 +50,30 @@ export default function NewReportInputScreen(props) {
           onPress={onPreviewClick}
         />
       </View>
-    </ImageBackground>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignContent: 'center',
+  },
+  contentContainer: {
+    flexGrow: 1
+  },
+  imageContainer: {
+    flex: 1,
     resizeMode: 'cover'
   },
   inputContainer: {
-    borderWidth: 1,
     height: 300,
-    marginTop: 300,
+    marginTop: 250,
     marginLeft: 30,
     marginRight: 30,
     fontFamily: 'myeongjo'
   },
   bottom: {
-    flex: 1,
     justifyContent: 'flex-end',
     marginBottom: 15
   }

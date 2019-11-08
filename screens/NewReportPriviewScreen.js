@@ -13,6 +13,7 @@ import {
   Icon,
   Text
 } from 'native-base';
+import { getToday } from '../utils';
 import Colors from '../constants/Colors';
 import { fontFamilyList, fontName, fontSizeList } from '../constants/Fonts';
 
@@ -23,7 +24,7 @@ export default function NewReportInputScreen(props) {
   const screen = useRef(null);
 
   const { navigation } = props;
-  const { onReportSubmit } = props.screenProps;
+  const { onReportSubmit, userData } = props.screenProps;
   const { text, template } = props.navigation.state.params;
 
   const submit = async() => {
@@ -63,6 +64,16 @@ export default function NewReportInputScreen(props) {
           source={{ uri: template.url }}
           ref={screen}
         >
+          <View style={[styles.date, { fontFamily: fontFamily }]}>
+            <Text style={styles.text}>
+              {getToday}
+            </Text>
+          </View>
+          <View style={styles.createdBy}>
+            <Text style={styles.text}>
+              {userData.name}
+            </Text>
+          </View>
           <View style={styles.textContainer}>
             <Text
               style={{ fontFamily: fontFamily, fontSize: fontSize }}
@@ -86,7 +97,7 @@ export default function NewReportInputScreen(props) {
               key={font}
               onPress={() => setFontFamily(font)}
             >
-              <Text style={[styles.fontBase, { fontFamily: font } ]}>
+              <Text style={[styles.fontBase, { fontFamily: font }]}>
                 {fontName[i]}
               </Text>
             </Button>
@@ -130,9 +141,21 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover'
   },
+  date: {
+    marginTop: 102,
+    marginLeft: 125
+  },
+  createdBy: {
+    marginTop: 50,
+    marginLeft: 125
+  },
+  text: {
+    fontSize: 12,
+    fontFamily: 'batang'
+  },
   textContainer: {
     height: 300,
-    marginTop: 300,
+    marginTop: 70,
     marginLeft: 30,
     marginRight: 30
   },
