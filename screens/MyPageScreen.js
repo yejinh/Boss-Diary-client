@@ -15,7 +15,7 @@ export default function MyPageScreen(props) {
   const { fetchUserData } = props.screenProps;
   const {
     name,
-    profilePhoto,
+    profile_photo,
     points,
     reports,
     templates
@@ -43,7 +43,7 @@ export default function MyPageScreen(props) {
           <View style={styles.userProfile}>
             <Image
               style={styles.userPhoto}
-              source={{ uri: profilePhoto }}
+              source={{ uri: profile_photo }}
             />
             <Text>{name}</Text>
           </View>

@@ -42,7 +42,9 @@ export default class NewReportInputScreen extends Component {
   _loadMoreReports = async() => {
     try {
       const { fetchUserReports } = this.props.screenProps;
-      const { pageNumber, reports } = this.state;
+      const { pageNumber, reports, isAllLoaded } = this.state;
+
+      if (isAllLoaded) return;
 
       const fetchedReports = await fetchUserReports(pageNumber);
 
@@ -53,10 +55,13 @@ export default class NewReportInputScreen extends Component {
         });
 
         if (pageNumber === 1) {
-          return Alert.alert('빈 보고서', '보고서를 작성하세요');
+          Alert.alert('빈 보고서', '보고서를 작성하세요');
+          return <EmptyScreen />;
         }
         return;
       }
+
+      if (reports[0] && reports[0]._id === fetchedReports[0]._id) return;
 
       this.setState({
         pageNumber: pageNumber + 1,
@@ -72,6 +77,8 @@ export default class NewReportInputScreen extends Component {
 
   _refresh = async() => {
     try {
+      this.setState({ isRefreshing : true });
+
       const reports = await fetchUserReports(1);
 
       this.setState({
@@ -95,7 +102,7 @@ export default class NewReportInputScreen extends Component {
   };
 
   render() {
-    const { reports, isRefreshing, isAllLoaded } = this.state;
+    const { reports, isRefreshing } = this.state;
     const { profilePhoto } = this.props.screenProps;
 
     return (
@@ -104,17 +111,9 @@ export default class NewReportInputScreen extends Component {
           data={reports}
           keyExtractor={item => item._id}
           refreshing={isRefreshing}
-          onRefresh={() => {
-            this.setState({ isRefreshing : true });
-            this._refresh();
-          }}
-          onEndReachedThreshold={0.05}
-          onEndReached={() => {
-            if (!isAllLoaded) {
-              this.setState({ isLoading: true });
-              this._loadMoreReports();
-            }
-          }}
+          onRefresh={this._refresh}
+          onEndReachedThreshold={0.5}
+          onEndReached={this._loadMoreReports}
           ListFooterComponent={this._footerSpinner}
           renderItem={({ item }) => (
             <Report
