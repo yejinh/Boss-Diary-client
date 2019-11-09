@@ -36,7 +36,7 @@ export default function Report(props) {
           <Left>
             <Button transparent>
               <Icon active name='thumbs-up' />
-              <Text>12 Likes</Text>
+              <Text>결재 요청</Text>
             </Button>
           </Left>
         </CardItem>

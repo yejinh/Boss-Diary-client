@@ -11,6 +11,7 @@ import {
   fetchTemplates,
   resetUserReports
 } from '../actions';
+import { getDate, getTime } from '../utils';
 
 const { API_URL } = getEnvVars();
 
@@ -164,7 +165,7 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
     data.append('templateId', templateId);
     data.append('date', new Date().toISOString());
 
-    await fetch(`${API_URL}/api/users/${userId}/reports`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
       method: 'POST',
        headers: {
         'Content-Type': 'multipart/form-data',
@@ -172,16 +173,45 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
       },
       body: data
     });
+
+    // id응답 받아서 state 추가
   } catch(err) {
     Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
   }
 };
 
+const reportsDateMark = userReports => {
+  const dates = userReports.map(report => getDate(report.created_at));
+
+  return dates.reduce((acc, date) => {
+    acc[date] = { marked: true, dotColor: 'gray' };
+    return acc;
+  }, {});
+};
+
+const reportsCalendarItem = userReports => {
+  return userReports.reduce((acc, report) => {
+    const date = getDate(report.created_at);
+    const time = getTime(report.created_at);
+    const data = {
+      title: report.title,
+      body: `${report.body.slice(0, 25)}...`,
+      time: time
+    };
+
+    acc[date]
+      ? acc[date].push(data)
+      : acc[date] = [data];
+    return acc;
+  }, {});
+}
+
 const mapStateToProps = state => ({
   userData: state.userData,
   userReports: state.userReports,
-  reportsDate: state.userReports.map(report => report.created_at),
+  reportsDateMark: reportsDateMark(state.userReports),
+  reportsCalendarItem: reportsCalendarItem(state.userReports),
   profilePhoto: state.profilePhoto,
   userTemplates: state. userTemplates,
   templates: state.templates

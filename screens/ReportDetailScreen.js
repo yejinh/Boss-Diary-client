@@ -13,7 +13,7 @@ import Report from '../components/Report';
 import EmptyScreen from '../components/EmptyScreen';
 import Colors from '../constants/Colors';
 
-export default function NewReportInputScreen(props) {
+export default function ReportDetailScreen(props) {
   const [ isActive,  setIsActive ] = useState(false);
   const [ isFetched, setIsFetched ] = useState(false);
 

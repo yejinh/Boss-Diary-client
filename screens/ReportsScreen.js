@@ -54,7 +54,7 @@ export default class ReportsScreen extends Component {
 
         if (pageNumber === 1) {
           Alert.alert('빈 보고서', '보고서를 작성하세요');
-          return <EmptyScreen />;
+          return <EmptyScreen message={'작성한 보고서가 없습니다'}/>;
         }
         return;
       }

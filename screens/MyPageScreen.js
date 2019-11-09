@@ -35,7 +35,12 @@ export default class ReportsScreen extends Component {
   }
 
   render() {
-    const { userData, userReports, reportsDate } = this.props.screenProps;
+    const {
+      userData,
+      userReports,
+      reportsDateMark,
+      reportsCalendarItem
+    } = this.props.screenProps;
     const {
       name,
       profile_photo,
@@ -74,7 +79,11 @@ export default class ReportsScreen extends Component {
             </View>
           </View>
           <View>
-            <Calendar reports={userReports} reportsDate={reportsDate} />
+            <Calendar
+              reports={userReports}
+              reportDates={reportsDateMark}
+              reportItems={reportsCalendarItem}
+            />
           </View>
         </ScrollView>
       </View>

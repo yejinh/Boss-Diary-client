@@ -39,7 +39,7 @@ export default function NewReportInputScreen(props) {
       type: 'multipart/form-data',
     };
 
-    onReportSubmit(text, photo, template._id);
+    await onReportSubmit(text, photo, template._id);
 
     Alert.alert(
       '보고서 제출 완료',
