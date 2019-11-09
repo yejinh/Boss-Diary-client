@@ -15,14 +15,12 @@ export default function NewReportScreen(props) {
   const { navigation } = props;
   const { userData, userTemplates, fetchUserTemplates } = props.screenProps;
 
-  const didFocus = navigation.addListener('didFocus', async() => {
-    await fetchUserTemplates(userData._id);
-    setIsFetched(true);
-  });
-
   useEffect(() => {
-    return () => didFocus.remove();
-  });
+    const fetchData = async() => await fetchUserTemplates(userData._id);
+
+    fetchData();
+    setIsFetched(true);
+  }, []);
 
   if (!userTemplates.length && !isFetched) return <LoadingSpinner />;
   if (!userTemplates.length) return <EmptyScreen message={'보유한 템플릿이 없습니다'}/>;

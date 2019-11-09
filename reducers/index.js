@@ -2,9 +2,11 @@ import * as actionTypes from '../constants/actionType';
 const initialState = {
   userData: null,
   userReports: [],
+  userAllReports: [],
   profilePhoto: null,
   userTemplates: [],
   templates: [],
+  numOfNewReport: 0
 };
 
 function reducer(state = initialState, action) {
@@ -24,6 +26,12 @@ function reducer(state = initialState, action) {
         userReports: state.userReports.concat(action.reports)
       };
 
+    case actionTypes.FETCH_USER_ALL_REPORTS:
+      return {
+        ...state,
+        userAllReports: action.reports
+      }
+
     case actionTypes.FETCH_USER_TEMPLATES:
       return {
         ...state,
@@ -35,6 +43,13 @@ function reducer(state = initialState, action) {
         ...state,
         templates: action.templates
       };
+
+    case actionTypes.ADD_NEW_REPORT:
+      return {
+        ...state,
+        userReports: [ action.newReport, ...state.userReports ],
+        numOfNewReport: state.numOfNewReport + 1
+      }
 
     case actionTypes.RESET_USER_REPORTS:
       return {

@@ -8,13 +8,15 @@ import {
   StyleSheet
 } from 'react-native';
 import { Form, Textarea } from 'native-base';
+import BottomButton from '../components/BottomButton';
 
 export default function NewReportInputScreen(props) {
   const [ text, onChangeText ] = React.useState('라떼는 말이야...');
 
   const { navigation } = props;
   const { template } = props.navigation.state.params;
-  const onPreviewClick = () => {
+
+  const _onPreviewClick = () => {
     if (text.length < 10) {
       return Alert.alert('작성', '보고서를 30자 이상 작성해 주세요');
     }
@@ -43,13 +45,7 @@ export default function NewReportInputScreen(props) {
           />
         </Form>
       </ImageBackground>
-      <View style={styles.bottom}>
-        <Button
-          style={styles.previewButton}
-          title='미리보기'
-          onPress={onPreviewClick}
-        />
-      </View>
+      <BottomButton title='미리보기' onPress={_onPreviewClick} />
     </ScrollView>
   );
 }

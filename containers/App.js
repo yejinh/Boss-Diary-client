@@ -7,8 +7,10 @@ import getEnvVars from '../environment';
 import {
   fetchUserData,
   fetchUserReports,
+  fetchAllUserReports,
   fetchUserTemplates,
   fetchTemplates,
+  addNewReport,
   resetUserReports
 } from '../actions';
 import { getDate, getTime } from '../utils';
@@ -63,12 +65,12 @@ const dispatchUserData = dispatch => async() => {
   }
 };
 
-const dispatchUserReports = dispatch => async(pageNumber) => {
+const dispatchUserReports = dispatch => async(pageNumber, numOfNewReport) => {
   try {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
 
-    const api = `${API_URL}/api/users/${userId}/reports${pageNumber ? `/page?page_number=${pageNumber}&page_size=2` : '' }`
+    const api = `${API_URL}/api/users/${userId}/reports/page?page_number=${pageNumber}&page_size=2&skip_page=${numOfNewReport}`
 
     const res = await fetch(api, {
       method: 'GET',
@@ -85,6 +87,31 @@ const dispatchUserReports = dispatch => async(pageNumber) => {
     }
 
     return reports;
+  } catch(err) {
+    Alert.alert('보고서 로딩 에러', err.message);
+    console.log(err);
+  }
+};
+
+const dispatchUserAllReports = dispatch => async() => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+
+    const api = `${API_URL}/api/users/${userId}/reports`
+
+    const res = await fetch(api, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { reports } = await res.json();
+
+    dispatch(fetchAllUserReports(reports));
+    return;
   } catch(err) {
     Alert.alert('보고서 로딩 에러', err.message);
     console.log(err);
@@ -174,7 +201,9 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
       body: data
     });
 
-    // id응답 받아서 state 추가
+    const { newReport } = await res.json();
+
+    dispatch(addNewReport(newReport));
   } catch(err) {
     Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
@@ -185,7 +214,7 @@ const reportsDateMark = userReports => {
   const dates = userReports.map(report => getDate(report.created_at));
 
   return dates.reduce((acc, date) => {
-    acc[date] = { marked: true, dotColor: 'gray' };
+    acc[date] = { marked: true };
     return acc;
   }, {});
 };
@@ -210,17 +239,20 @@ const reportsCalendarItem = userReports => {
 const mapStateToProps = state => ({
   userData: state.userData,
   userReports: state.userReports,
-  reportsDateMark: reportsDateMark(state.userReports),
-  reportsCalendarItem: reportsCalendarItem(state.userReports),
+  userAllReports: state.userAllReports,
+  reportsDateMark: reportsDateMark(state.userAllReports),
+  reportsCalendarItem: reportsCalendarItem(state.userAllReports),
   profilePhoto: state.profilePhoto,
   userTemplates: state. userTemplates,
-  templates: state.templates
+  templates: state.templates,
+  numOfNewReport: state.numOfNewReport
 });
 
 const mapDispatchToProps = dispatch => ({
   fetchFacebookData: dispatchFacebookData(dispatch),
   fetchUserData: dispatchUserData(dispatch),
   fetchUserReports: dispatchUserReports(dispatch),
+  fetchUserAllReports: dispatchUserAllReports(dispatch),
   fetchTemplates: dispatchTemplates(dispatch),
   fetchUserTemplates: dispatchUserTemplates(dispatch),
   onTemplateAdd: dispatchTemplateAdd(dispatch),

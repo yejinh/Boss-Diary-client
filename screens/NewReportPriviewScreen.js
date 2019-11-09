@@ -13,6 +13,7 @@ import {
   Icon,
   Text
 } from 'native-base';
+import BottomButton from '../components/BottomButton';
 import { getToday } from '../utils';
 import Colors from '../constants/Colors';
 import { fontFamilyList, fontName, fontSizeList } from '../constants/Fonts';
@@ -27,7 +28,26 @@ export default function NewReportInputScreen(props) {
   const { onReportSubmit, userData } = props.screenProps;
   const { text, template } = props.navigation.state.params;
 
-  const submit = async() => {
+  const _alert = () => {
+    return (
+      Alert.alert(
+        '보고서 제출',
+        `${template.name}를 제출 하시겠습니까?`,
+        [
+          {
+            text: '제출',
+            onPress: _submit
+          },
+          {
+            text: '취소',
+            style: 'destructive',
+          },
+        ]
+      )
+    );
+  }
+
+  const _submit = async() => {
     const data = await captureRef(screen, {
       format: 'jpg',
       quality: 0.8,
@@ -114,23 +134,7 @@ export default function NewReportInputScreen(props) {
         </Fab>
       </View>
       <View style={styles.bottom}>
-        <Button
-          title='저장하기'
-          onPress={() => Alert.alert(
-            '보고서 제출',
-            `${template.name}를 제출 하시겠습니까?`,
-            [
-              {
-                text: '제출',
-                onPress: submit
-              },
-              {
-                text: '취소',
-                style: 'destructive',
-              },
-            ]
-          )}
-        />
+        <BottomButton title='저장하기' onPress={_alert} />
       </View>
     </Container>
   );

@@ -15,6 +15,7 @@ export default function Calendar(props) {
     selectedDayBackgroundColor: Colors.deepGray,
     todayTextColor: Colors.gray,
     dayTextColor: Colors.deepGray,
+    dotColor: Colors.gray,
     agendaDayTextColor: 'yellow',
     agendaDayNumColor: 'green',
     agendaTodayColor: 'green',
@@ -22,7 +23,6 @@ export default function Calendar(props) {
   };
 
   LocaleConfig.locales.ko = local;
-
   LocaleConfig.defaultLocale = 'ko';
 
   return (

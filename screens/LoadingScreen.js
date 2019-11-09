@@ -12,7 +12,7 @@ export default function LoadingScreen(props) {
   const { navigation } = props;
   const { fetchUserData } = props.screenProps;
 
-  async function loadResourcesAsync() {
+  async function _loadResourcesAsync() {
     try {
       await Promise.all([
         Font.loadAsync({
@@ -35,12 +35,12 @@ export default function LoadingScreen(props) {
     }
   }
 
-  function handleLoadingError(error) {
+  function _handleLoadingError(error) {
     Alert.alert('로딩 에러', err.message);
     console.warn(error);
   }
 
-  async function navigateLoginScreen() {
+  async function _navigateLoginScreen() {
     try {
       if (isReady) {
         const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
@@ -61,9 +61,9 @@ export default function LoadingScreen(props) {
 
   return (
     <AppLoading
-      startAsync={loadResourcesAsync}
-      onError={handleLoadingError}
-      onFinish={navigateLoginScreen}
+      startAsync={_loadResourcesAsync}
+      onError={_handleLoadingError}
+      onFinish={_navigateLoginScreen}
     />
   );
 }

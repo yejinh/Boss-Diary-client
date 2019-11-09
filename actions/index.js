@@ -17,6 +17,11 @@ export const fetchUserReports = reports => ({
   reports
 });
 
+export const fetchAllUserReports = reports => ({
+  type: actionType.FETCH_USER_ALL_REPORTS,
+  reports
+});
+
 export const fetchUserTemplates = templates => ({
   type: actionType.FETCH_USER_TEMPLATES,
   templates
@@ -25,6 +30,11 @@ export const fetchUserTemplates = templates => ({
 export const fetchTemplates = templates => ({
   type: actionType.FETCH_TEMPLATES,
   templates
+});
+
+export const addNewReport = newReport =>({
+  type: actionType.ADD_NEW_REPORT,
+  newReport
 });
 
 export const resetUserReports = () => ({

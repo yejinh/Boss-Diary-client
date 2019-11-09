@@ -11,40 +11,29 @@ export default class ReportsScreen extends Component {
     this.state = {
       pageNumber: 1,
       isLoading: false,
-      isRefreshing: false,
       isAllLoaded: false
     };
   }
 
   componentDidMount() {
-    const { onUserReportsReset } = this.props.screenProps;
-
-    this.subs = [
-      this.props.navigation.addListener('didFocus', () => {
-        this.setState({ isLoading: true });
-        this._loadMoreReports();
-      }),
-
-      this.props.navigation.addListener('willBlur', () => {
-        this.setState({ pageNumber: 1 });
-        onUserReportsReset();
-      })
-    ];
-  }
-
-
-  componentWillUnmount() {
-    this.subs.forEach(sub => sub.remove());
+    this._loadMoreReports();
   }
 
   _loadMoreReports = async() => {
     try {
-      const { fetchUserReports } = this.props.screenProps;
-      const { pageNumber, reports, isAllLoaded } = this.state;
+      const {
+        numOfNewReport,
+        fetchUserReports
+      } = this.props.screenProps;
+
+      const {
+        pageNumber,
+        isAllLoaded
+      } = this.state;
 
       if (isAllLoaded) return;
 
-      const fetchedReports = await fetchUserReports(pageNumber);
+      const fetchedReports = await fetchUserReports(pageNumber, numOfNewReport);
 
       if (!fetchedReports.length) {
         this.setState({
@@ -70,24 +59,6 @@ export default class ReportsScreen extends Component {
     }
   }
 
-  _refresh = async() => {
-    try {
-      this.setState({ isRefreshing : true });
-
-      await fetchUserReports(1);
-
-      this.setState({
-        pageNumber: 2,
-        isRefreshing: false
-      });
-    } catch(err) {
-      this.setState({
-        pageNumber: 2,
-        isRefreshing: false
-      });
-    }
-  };
-
   _footerSpinner = () => {
     if (this.state.isLoading) {
       return <LoadingSpinner />;
@@ -96,7 +67,7 @@ export default class ReportsScreen extends Component {
   };
 
   render() {
-    const { isLoading, isRefreshing } = this.state;
+    const { isLoading } = this.state;
     const { userReports, profilePhoto } = this.props.screenProps;
 
     if (isLoading) return <LoadingSpinner />;
@@ -106,8 +77,6 @@ export default class ReportsScreen extends Component {
         <FlatList
           data={userReports}
           keyExtractor={item => item._id}
-          refreshing={isRefreshing}
-          onRefresh={this._refresh}
           onEndReachedThreshold={0.5}
           onEndReached={this._loadMoreReports}
           ListFooterComponent={this._footerSpinner}
