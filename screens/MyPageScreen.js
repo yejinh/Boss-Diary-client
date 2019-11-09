@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Component, useEffect } from 'react';
 import {
   Image,
   ScrollView,
@@ -10,61 +10,140 @@ import LoadingSpinner from '../components/Spinner';
 import Calendar from '../components/Calendar';
 import Colors from '../constants/Colors';
 
-export default function MyPageScreen(props) {
-  const { navigation } = props;
-  const { fetchUserData } = props.screenProps;
-  const {
-    name,
-    profile_photo,
-    points,
-    reports,
-    templates
-  } = props.screenProps.userData;
+export default class ReportsScreen extends Component {
+  componentDidMount() {
+    const {
+      fetchUserData,
+      fetchUserReports,
+      onUserReportsReset
+    } = this.props.screenProps;
 
-  const didFocus = navigation.addListener('didFocus', () => {
-    fetchUserData()
-  });
+    this.subs = [
+      this.props.navigation.addListener('didFocus', () => {
+        fetchUserData();
+        fetchUserReports();
+      }),
 
-  useEffect(() => {
-    return () => didFocus.remove();
-  });
+      this.props.navigation.addListener('willBlur', () => {
+        onUserReportsReset();
+      })
+    ];
+  }
 
-  if (!name) return <LoadingSpinner />;
+  componentWillUnmount() {
+    this.subs.forEach(sub => sub.remove());
+  }
 
-  const infoName = [ '상여금', '보고서', '템플릿' ];
-  const userInfo = [ points, reports.length, templates.length ];
+  render() {
+    const { userData, userReports, reportsDate } = this.props.screenProps;
+    const {
+      name,
+      profile_photo,
+      points,
+      reports,
+      templates
+    } = userData;
 
-  return (
-    <View style={styles.container}>
-      <ScrollView style={styles.container}>
-        <View style={styles.userProfileContainer}>
-          <View style={styles.userProfile}>
-            <Image
-              style={styles.userPhoto}
-              source={{ uri: profile_photo }}
-            />
-            <Text>{name}</Text>
-          </View>
-          <View style={styles.userInfo}>
-            {userInfo.map((info, i) => (
-              <View key={i} style={styles.infoContent}>
-                <View style={styles.infoName}>
-                  <Text>{infoName[i]}</Text>
+    const infoName = [ '상여금', '보고서', '템플릿' ];
+    const userInfo = [ points, reports.length, templates.length ];
+
+    if (!name) return <LoadingSpinner />;
+
+    return (
+      <View style={styles.container}>
+        <ScrollView style={styles.container}>
+          <View style={styles.userProfileContainer}>
+            <View style={styles.userProfile}>
+              <Image
+                style={styles.userPhoto}
+                source={{ uri: profile_photo }}
+              />
+              <Text>{name}</Text>
+            </View>
+            <View style={styles.userInfo}>
+              {userInfo.map((info, i) => (
+                <View key={i} style={styles.infoContent}>
+                  <View style={styles.infoName}>
+                    <Text>{infoName[i]}</Text>
+                  </View>
+                  <View style={styles.info}>
+                    <Text style={styles.infoText}>{info}</Text>
+                  </View>
                 </View>
-                <View style={styles.info}>
-                  <Text style={styles.infoText}>{info}</Text>
-                </View>
-              </View>
-            ))}
+              ))}
+            </View>
           </View>
-        </View>
-        <View>
-          <Calendar />
-        </View>
-      </ScrollView>
-    </View>
-  );
+          <View>
+            <Calendar reports={userReports} reportsDate={reportsDate} />
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 }
+
+// export default function MyPageScreen(props) {
+//   const { navigation } = props;
+//   const {
+//     userReports,
+//     fetchUserData,
+//     fetchUserReports
+//   } = props.screenProps;
+//   const {
+//     name,
+//     profile_photo,
+//     points,
+//     reports,
+//     templates
+//   } = props.screenProps.userData;
+
+//   console.log(userReports);
+
+//   const didFocus = navigation.addListener('didFocus', () => {
+//     fetchUserData();
+//     fetchUserReports();
+//   });
+
+//   useEffect(() => {
+//     return () => didFocus.remove();
+//   }, []);
+
+//   if (!name) return <LoadingSpinner />;
+
+//   const infoName = [ '상여금', '보고서', '템플릿' ];
+//   const userInfo = [ points, reports.length, templates.length ];
+
+//   return (
+//     <View style={styles.container}>
+//       <ScrollView style={styles.container}>
+//         <View style={styles.userProfileContainer}>
+//           <View style={styles.userProfile}>
+//             <Image
+//               style={styles.userPhoto}
+//               source={{ uri: profile_photo }}
+//             />
+//             <Text>{name}</Text>
+//           </View>
+//           <View style={styles.userInfo}>
+//             {userInfo.map((info, i) => (
+//               <View key={i} style={styles.infoContent}>
+//                 <View style={styles.infoName}>
+//                   <Text>{infoName[i]}</Text>
+//                 </View>
+//                 <View style={styles.info}>
+//                   <Text style={styles.infoText}>{info}</Text>
+//                 </View>
+//               </View>
+//             ))}
+//           </View>
+//         </View>
+//         <View>
+//           <Calendar />
+//         </View>
+//       </ScrollView>
+//     </View>
+//   );
+// }
 
 const styles = StyleSheet.create({
   container: {

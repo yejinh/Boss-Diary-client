@@ -9,7 +9,6 @@ export default class ReportsScreen extends Component {
     super(props);
 
     this.state = {
-      reports: [],
       pageNumber: 1,
       isLoading: false,
       isRefreshing: false,
@@ -18,19 +17,17 @@ export default class ReportsScreen extends Component {
   }
 
   componentDidMount() {
+    const { onUserReportsReset } = this.props.screenProps;
+
     this.subs = [
       this.props.navigation.addListener('didFocus', () => {
-        this.setState({
-          isLoading: true
-        });
+        this.setState({ isLoading: true });
         this._loadMoreReports();
       }),
 
       this.props.navigation.addListener('willBlur', () => {
-        this.setState({
-          pageNumber: 1,
-          reports: []
-        });
+        this.setState({ pageNumber: 1 });
+        onUserReportsReset();
       })
     ];
   }
@@ -62,11 +59,8 @@ export default class ReportsScreen extends Component {
         return;
       }
 
-      if (reports[0] && reports[0]._id === fetchedReports[0]._id) return;
-
       this.setState({
         pageNumber: pageNumber + 1,
-        reports: reports.concat(fetchedReports),
         isLoading: false
       });
     } catch(err) {
@@ -80,11 +74,10 @@ export default class ReportsScreen extends Component {
     try {
       this.setState({ isRefreshing : true });
 
-      const reports = await fetchUserReports(1);
+      await fetchUserReports(1);
 
       this.setState({
         pageNumber: 2,
-        reports: reports,
         isRefreshing: false
       });
     } catch(err) {
@@ -103,13 +96,15 @@ export default class ReportsScreen extends Component {
   };
 
   render() {
-    const { reports, isRefreshing } = this.state;
-    const { profilePhoto } = this.props.screenProps;
+    const { isLoading, isRefreshing } = this.state;
+    const { userReports, profilePhoto } = this.props.screenProps;
+
+    if (isLoading) return <LoadingSpinner />;
 
     return (
       <SafeAreaView>
         <FlatList
-          data={reports}
+          data={userReports}
           keyExtractor={item => item._id}
           refreshing={isRefreshing}
           onRefresh={this._refresh}

@@ -3,6 +3,7 @@ import { CalendarList } from 'react-native-calendars';
 import Arrow from './Arrow';
 
 export default function Calendar(props) {
+  console.log(props.reportsDate);
   return (
     <CalendarList
       horizontal={true}

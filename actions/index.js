@@ -12,6 +12,11 @@ export const fetchUserData = userData => ({
   templates: userData.templates
 });
 
+export const fetchUserReports = reports => ({
+  type: actionType.FETCH_USER_REPORTS,
+  reports
+});
+
 export const fetchUserTemplates = templates => ({
   type: actionType.FETCH_USER_TEMPLATES,
   templates
@@ -20,4 +25,8 @@ export const fetchUserTemplates = templates => ({
 export const fetchTemplates = templates => ({
   type: actionType.FETCH_TEMPLATES,
   templates
+});
+
+export const resetUserReports = () => ({
+  type: actionType.RESET_USER_REPORTS
 });

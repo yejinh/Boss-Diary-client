@@ -6,8 +6,10 @@ import AppNavigator from '../navigation/AppNavigator';
 import getEnvVars from '../environment';
 import {
   fetchUserData,
+  fetchUserReports,
   fetchUserTemplates,
-  fetchTemplates
+  fetchTemplates,
+  resetUserReports
 } from '../actions';
 
 const { API_URL } = getEnvVars();
@@ -65,7 +67,9 @@ const dispatchUserReports = dispatch => async(pageNumber) => {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${userId}/reports?page_number=${pageNumber}&page_size=2`, {
+    const api = `${API_URL}/api/users/${userId}/reports${pageNumber ? `/page?page_number=${pageNumber}&page_size=2` : '' }`
+
+    const res = await fetch(api, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -75,12 +79,16 @@ const dispatchUserReports = dispatch => async(pageNumber) => {
 
     const { reports } = await res.json();
 
+    if (reports.length) {
+      dispatch(fetchUserReports(reports));
+    }
+
     return reports;
   } catch(err) {
     Alert.alert('보고서 로딩 에러', err.message);
     console.log(err);
   }
-}
+};
 
 const dispatchTemplates = dispatch => async() => {
   try {
@@ -168,10 +176,12 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
     Alert.alert('보고서 제출 에러', err.message);
     console.log(err);
   }
-}
+};
 
 const mapStateToProps = state => ({
   userData: state.userData,
+  userReports: state.userReports,
+  reportsDate: state.userReports.map(report => report.created_at),
   profilePhoto: state.profilePhoto,
   userTemplates: state. userTemplates,
   templates: state.templates
@@ -184,7 +194,8 @@ const mapDispatchToProps = dispatch => ({
   fetchTemplates: dispatchTemplates(dispatch),
   fetchUserTemplates: dispatchUserTemplates(dispatch),
   onTemplateAdd: dispatchTemplateAdd(dispatch),
-  onReportSubmit: dispatchReportSubmit(dispatch)
+  onReportSubmit: dispatchReportSubmit(dispatch),
+  onUserReportsReset: () => dispatch(resetUserReports())
 });
 
 const AppContainer = props => {
