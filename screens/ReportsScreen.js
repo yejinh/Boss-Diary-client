@@ -1,45 +1,39 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, FlatList, Alert } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
 import Report from '../components/Report';
+import ReportModal from '../components/ReportModal';
 import EmptyScreen from '../components/EmptyScreen';
 
-export default class ReportsScreen extends Component {
-  constructor(props) {
-    super(props);
+export default function ReportsScreen(props) {
+  const [ isLoading, setIsLoading ] = useState(false);
+  const [ isAllLoaded, setIsAllLoaded ] = useState(false);
+  const [ modalVisible, setModalVisible ] = useState(false);
+  const [ clickedReport, setClickedReport ] = useState(null);
+  const [ pageNumber, setPageNumber ] = useState(1);
 
-    this.state = {
-      pageNumber: 1,
-      isLoading: false,
-      isAllLoaded: false
-    };
-  }
+  const {
+    userReports,
+    profilePhoto,
+    numOfNewReport,
+    fetchUserReports,
+    onUserSearch,
+    onApprovalRequest,
+  } = props.screenProps;
 
-  componentDidMount() {
-    this._loadMoreReports();
-  }
+  useEffect(() => {
+    _loadMoreReports();
+  }, []);
 
-  _loadMoreReports = async() => {
+  const _loadMoreReports = async() => {
     try {
-      const {
-        numOfNewReport,
-        fetchUserReports,
-      } = this.props.screenProps;
-
-      const {
-        pageNumber,
-        isAllLoaded
-      } = this.state;
-
       if (isAllLoaded) return;
 
       const fetchedReports = await fetchUserReports(pageNumber, numOfNewReport);
 
       if (!fetchedReports.length) {
-        this.setState({
-          isLoading: false,
-          isAllLoaded: true
-        });
+        setIsLoading(false);
+        setIsAllLoaded(true);
 
         if (pageNumber === 1) {
           Alert.alert('빈 보고서', '보고서를 작성하세요');
@@ -48,54 +42,61 @@ export default class ReportsScreen extends Component {
         return;
       }
 
-      this.setState({
-        pageNumber: pageNumber + 1,
-        isLoading: false
-      });
+      setPageNumber(pageNumber + 1);
+      setIsLoading(false);
     } catch(err) {
-      this.setState({
-        isLoading: false
-      });
+      setIsLoading(false);
+      console.log(err);
     }
-  }
+  };
 
-  _footerSpinner = () => {
-    if (this.state.isLoading) {
+  const _toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const _clickReport = itemId => () => {
+    setClickedReport(itemId)
+  };
+
+  const _requestApproval = userId => {
+    onApprovalRequest(clickedReport, userId);
+  };
+
+  const _footerSpinner = () => {
+    if (isLoading) {
       return <LoadingSpinner />;
     }
     return null;
   };
 
-  render() {
-    const { isLoading } = this.state;
-    const {
-      userReports,
-      profilePhoto,
-      onUserSearch,
-      onApprovalRequest
-    } = this.props.screenProps;
+  if (isLoading) return <LoadingSpinner />;
 
-    if (isLoading) return <LoadingSpinner />;
-
-    return (
-      <SafeAreaView>
-        <FlatList
-          data={userReports}
-          keyExtractor={item => item._id}
-          onEndReachedThreshold={0.5}
-          onEndReached={this._loadMoreReports}
-          ListFooterComponent={this._footerSpinner}
-          renderItem={({ item }) => (
-            <Report
-              key={item._id}
-              profilePhoto={profilePhoto}
-              report={item}
-              onUserSearch={onUserSearch}
-              onClick={onApprovalRequest}
-            />
-          )}
-        />
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView>
+      <FlatList
+        data={userReports}
+        keyExtractor={item => item._id}
+        onEndReachedThreshold={0.01}
+        onEndReached={_loadMoreReports}
+        ListFooterComponent={_footerSpinner}
+        renderItem={({ item }) => (
+          <Report
+            key={item._id}
+            profilePhoto={profilePhoto}
+            report={item}
+            openModal={_toggleModal}
+            onUserSearch={onUserSearch}
+            onClick={_clickReport(item._id)}
+          />
+        )}
+      />
+      <ReportModal
+        modalVisible={modalVisible}
+        closeModal={_toggleModal}
+        onUserSearch={onUserSearch}
+        toggleModal={_toggleModal}
+        onClick={_requestApproval}
+      />
+    </SafeAreaView>
+  );
 }

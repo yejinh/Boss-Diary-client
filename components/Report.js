@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Image,
   CameraRoll,
@@ -15,13 +15,15 @@ import {
   Left,
 } from 'native-base';
 import CardHeader from './CardHeader';
-import ReportModal from './ReportModal';
 import Colors from '../constants/Colors';
 
 export default function Report(props) {
-  const [ modalVisible, setModalVisible ] = useState(false);
-
-  const { profilePhoto, report, onUserSearch, onClick } = props;
+  const {
+    profilePhoto,
+    report,
+    openModal,
+    onClick
+  } = props;
   const { title, created_at: createdAt, url } = report;
 
   const _saveToCameraRoll = async() => {
@@ -49,11 +51,10 @@ export default function Report(props) {
     }
   };
 
-  const _toggleModal = () => {
-    setModalVisible(!modalVisible);
+  const _requestApproval = () => {
+    openModal();
+    onClick();
   };
-
-  const _requestApproval = onClick.bind(null, report._id);
 
   return (
     <Container style={styles.container}>
@@ -68,7 +69,7 @@ export default function Report(props) {
         </CardItem>
         <CardItem>
           <Left>
-            <Button transparent onPress={_toggleModal}>
+            <Button transparent onPress={_requestApproval}>
               <Text style={styles.icon}>결재 요청</Text>
             </Button>
           </Left>
@@ -80,12 +81,6 @@ export default function Report(props) {
           </Button>
         </CardItem>
       </Card>
-      <ReportModal
-        modalVisible={modalVisible}
-        closeModal={_toggleModal}
-        onUserSearch={onUserSearch}
-        onClick={_requestApproval}
-      />
     </Container>
   );
 }

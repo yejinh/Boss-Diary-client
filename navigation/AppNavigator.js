@@ -6,8 +6,9 @@ import {
 
 import LoadingScreen from '../screens/LoadingScreen';
 import LoginScreen from '../screens/LoginScreen';
-import MyPageStack from './MyPageStackNavigator';
 import MainTab from './MainTabNavigator';
+import RequestsScreen from '../screens/RequestsScreen';
+import MyPageStack from './MyPageStackNavigator';
 
 const mainDrawer = createDrawerNavigator(
   {
@@ -15,6 +16,12 @@ const mainDrawer = createDrawerNavigator(
       screen: MainTab,
       navigationOptions: {
         drawerLabel: '메인 페이지'
+      }
+    },
+    Requests: {
+      screen: RequestsScreen,
+      navigationOptions: {
+        drawerLabel: '승인 요청'
       }
     },
     Settings: {

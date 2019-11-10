@@ -33,6 +33,8 @@ export default function ReportModal(props) {
 
   const _onUserSearch = async() => {
     try {
+      if (!email) return setError(true);
+
       const searchedUser = await onUserSearch(email);
       setEmail('');
 
@@ -86,19 +88,19 @@ export default function ReportModal(props) {
 
   return (
     <Modal
-      type='fade'
       isVisible={modalVisible}
       onRequestClose={_closeModal}
     >
-      <TouchableOpacity
-        activeOpacity={1}
-        onPressOut={_closeModal}
-      >
         <View style={styles.modal}>
           <Form>
-            <Header>
-              <Text>이메일 주소로 과장님을 검색해 결재 요청을 보내세요</Text>
-            </Header>
+            <TouchableOpacity
+              activeOpacity={1}
+              onPressOut={_closeModal}
+            >
+              <Header>
+                <Text>이메일 주소로 과장님을 검색해 결재 요청을 보내세요</Text>
+              </Header>
+            </TouchableOpacity>
             {!error
               ? <View style={styles.emailBox}>
                 {!user
@@ -131,7 +133,6 @@ export default function ReportModal(props) {
             onPress={!user ? _onUserSearch : _onApprovalRequest}
           />
         </View>
-      </TouchableOpacity>
     </Modal>
   );
 }

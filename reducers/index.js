@@ -4,6 +4,7 @@ const initialState = {
   userData: null,
   userReports: [],
   userAllReports: [],
+  approvalRequests: [],
   profilePhoto: null,
   userTemplates: [],
   templates: [],
@@ -20,7 +21,7 @@ function reducer(state = initialState, action) {
       };
 
     case actionTypes.FETCH_USER_REPORTS:
-      if (state.userReports[0] && state.userReports[0]._id === action.reports[0]._id) return state;
+      // if (state.userReports[0] && state.userReports[0]._id === action.reports[0]._id) return state;
 
       return {
         ...state,
@@ -31,6 +32,12 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         userAllReports: action.reports
+      };
+
+    case actionTypes.FETCH_APPROVAL_REQUESTS:
+      return {
+        ...state,
+        approvalRequests: state.approvalRequests.concat(action.reports)
       };
 
     case actionTypes.FETCH_USER_TEMPLATES:

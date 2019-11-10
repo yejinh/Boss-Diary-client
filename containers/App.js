@@ -8,6 +8,7 @@ import {
   fetchUserData,
   fetchUserReports,
   fetchAllUserReports,
+  fetchApprovalRequests,
   fetchUserTemplates,
   fetchTemplates,
   addNewReport
@@ -117,6 +118,35 @@ const dispatchUserAllReports = dispatch => async() => {
     console.log(err);
   }
 };
+
+const dispatchApprovalRequests = dispatch => async(pageNumber) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+    const query = `page?page_number=${pageNumber}&page_size=2`;
+
+    const api = `${API_URL}/api/users/${userId}/reports/requests/${query}`;
+
+    const res = await fetch(api, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { reports } = await res.json();
+
+    if (reports.length) {
+      dispatch(fetchApprovalRequests(reports));
+    }
+
+    return reports;
+  } catch(err) {
+    Alert.alert('보고서 로딩 에러', err.message);
+    console.log(err);
+  }
+}
 
 const dispatchTemplates = dispatch => async() => {
   try {
@@ -275,6 +305,7 @@ const mapStateToProps = state => ({
   userData: state.userData,
   userReports: state.userReports,
   userAllReports: state.userAllReports,
+  approvalRequests: state.approvalRequests,
   reportsDateMark: reportsDateMark(state.userAllReports),
   reportsCalendarItem: reportsCalendarItem(state.userAllReports),
   profilePhoto: state.profilePhoto,
@@ -288,6 +319,7 @@ const mapDispatchToProps = dispatch => ({
   fetchUserData: dispatchUserData(dispatch),
   fetchUserReports: dispatchUserReports(dispatch),
   fetchUserAllReports: dispatchUserAllReports(dispatch),
+  fetchApprovalRequests: dispatchApprovalRequests(dispatch),
   fetchTemplates: dispatchTemplates(dispatch),
   fetchUserTemplates: dispatchUserTemplates(dispatch),
   onTemplateAdd: dispatchTemplateAdd(dispatch),

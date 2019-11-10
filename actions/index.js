@@ -22,6 +22,11 @@ export const fetchAllUserReports = reports => ({
   reports
 });
 
+export const fetchApprovalRequests = reports => ({
+  type: actionType.FETCH_APPROVAL_REQUESTS,
+  reports
+});
+
 export const fetchUserTemplates = templates => ({
   type: actionType.FETCH_USER_TEMPLATES,
   templates
