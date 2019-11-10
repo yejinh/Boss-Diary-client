@@ -2,8 +2,6 @@ import React from 'react';
 import {
   ScrollView,
   ImageBackground,
-  View,
-  Button,
   Alert,
   StyleSheet
 } from 'react-native';
@@ -11,7 +9,7 @@ import { Form, Textarea } from 'native-base';
 import BottomButton from '../components/BottomButton';
 
 export default function NewReportInputScreen(props) {
-  const [ text, onChangeText ] = React.useState('라떼는 말이야...');
+  const [ text, setText ] = React.useState('라떼는 말이야...');
 
   const { navigation } = props;
   const { template } = props.navigation.state.params;
@@ -37,7 +35,7 @@ export default function NewReportInputScreen(props) {
         <Form>
           <Textarea
             style={styles.inputContainer}
-            onChangeText={text => onChangeText(text)}
+            onChangeText={text => setText(text)}
             placeholder='작성하세요'
             maxLength={100}
             multiline={true}

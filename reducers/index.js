@@ -1,4 +1,5 @@
 import * as actionTypes from '../constants/actionType';
+import { ActionSheet } from 'native-base';
 const initialState = {
   userData: null,
   userReports: [],
@@ -30,7 +31,7 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         userAllReports: action.reports
-      }
+      };
 
     case actionTypes.FETCH_USER_TEMPLATES:
       return {
@@ -49,12 +50,6 @@ function reducer(state = initialState, action) {
         ...state,
         userReports: [ action.newReport, ...state.userReports ],
         numOfNewReport: state.numOfNewReport + 1
-      }
-
-    case actionTypes.RESET_USER_REPORTS:
-      return {
-        ...state,
-        userReports: []
       };
 
     default:

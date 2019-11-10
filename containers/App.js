@@ -10,8 +10,7 @@ import {
   fetchAllUserReports,
   fetchUserTemplates,
   fetchTemplates,
-  addNewReport,
-  resetUserReports
+  addNewReport
 } from '../actions';
 import { getDate, getTime } from '../utils';
 
@@ -69,8 +68,9 @@ const dispatchUserReports = dispatch => async(pageNumber, numOfNewReport) => {
   try {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
+    const query = `page?page_number=${pageNumber}&page_size=2&skip_page=${numOfNewReport}`;
 
-    const api = `${API_URL}/api/users/${userId}/reports/page?page_number=${pageNumber}&page_size=2&skip_page=${numOfNewReport}`
+    const api = `${API_URL}/api/users/${userId}/reports/${query}`;
 
     const res = await fetch(api, {
       method: 'GET',
@@ -144,7 +144,7 @@ const dispatchTemplateAdd = dispatch => async(templateId, price) => {
     const accessToken = await getAccessToken()
     const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${userId}`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}/templates`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -210,6 +210,41 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
   }
 };
 
+const dispatchUserSearch = dispatch => async(email) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    const res = await fetch(`${API_URL}/api/users/email/${email}`, {
+      method: 'GET',
+       headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { userData } = await res.json();
+    return userData;
+  } catch(err) {
+    console.log(err);
+  }
+};
+
+const dispatchApprovalRequest = dispatch => async(reportId, userId) => {
+  try {
+    const accessToken = await getAccessToken();
+
+    await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/request`, {
+      method: 'PUT',
+       headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+  } catch(err) {
+    console.log(err);
+  }
+};
+
 const reportsDateMark = userReports => {
   const dates = userReports.map(report => getDate(report.created_at));
 
@@ -245,7 +280,7 @@ const mapStateToProps = state => ({
   profilePhoto: state.profilePhoto,
   userTemplates: state. userTemplates,
   templates: state.templates,
-  numOfNewReport: state.numOfNewReport
+  numOfNewReport: state.numOfNewReport,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -257,7 +292,8 @@ const mapDispatchToProps = dispatch => ({
   fetchUserTemplates: dispatchUserTemplates(dispatch),
   onTemplateAdd: dispatchTemplateAdd(dispatch),
   onReportSubmit: dispatchReportSubmit(dispatch),
-  onUserReportsReset: () => dispatch(resetUserReports())
+  onUserSearch: dispatchUserSearch(dispatch),
+  onApprovalRequest: dispatchApprovalRequest(dispatch)
 });
 
 const AppContainer = props => {

@@ -32,11 +32,7 @@ export const fetchTemplates = templates => ({
   templates
 });
 
-export const addNewReport = newReport =>({
+export const addNewReport = newReport => ({
   type: actionType.ADD_NEW_REPORT,
   newReport
-});
-
-export const resetUserReports = () => ({
-  type: actionType.RESET_USER_REPORTS
 });

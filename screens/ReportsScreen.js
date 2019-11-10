@@ -23,7 +23,7 @@ export default class ReportsScreen extends Component {
     try {
       const {
         numOfNewReport,
-        fetchUserReports
+        fetchUserReports,
       } = this.props.screenProps;
 
       const {
@@ -68,7 +68,12 @@ export default class ReportsScreen extends Component {
 
   render() {
     const { isLoading } = this.state;
-    const { userReports, profilePhoto } = this.props.screenProps;
+    const {
+      userReports,
+      profilePhoto,
+      onUserSearch,
+      onApprovalRequest
+    } = this.props.screenProps;
 
     if (isLoading) return <LoadingSpinner />;
 
@@ -85,6 +90,8 @@ export default class ReportsScreen extends Component {
               key={item._id}
               profilePhoto={profilePhoto}
               report={item}
+              onUserSearch={onUserSearch}
+              onClick={onApprovalRequest}
             />
           )}
         />

@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import { Image, CameraRoll, Alert, StyleSheet,  Picker } from 'react-native';
+import {
+  Image,
+  CameraRoll,
+  Alert,
+  StyleSheet
+} from 'react-native';
 import {
   Container,
   Card,
   CardItem,
-  Thumbnail,
-  View,
   Text,
   Button,
   Icon,
   Left,
-  Right,
-  Body
 } from 'native-base';
-import Modal from 'react-native-modal';
-import BottomButton from './BottomButton';
-import { getDetailDate } from '../utils';
+import CardHeader from './CardHeader';
+import ReportModal from './ReportModal';
 import Colors from '../constants/Colors';
 
 export default function Report(props) {
   const [ modalVisible, setModalVisible ] = useState(false);
 
-  const { profilePhoto, report } = props;
+  const { profilePhoto, report, onUserSearch, onClick } = props;
   const { title, created_at: createdAt, url } = report;
 
   const _saveToCameraRoll = async() => {
@@ -49,24 +49,26 @@ export default function Report(props) {
     }
   };
 
+  const _toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const _requestApproval = onClick.bind(null, report._id);
+
   return (
     <Container style={styles.container}>
       <Card style={styles.cardContainer}>
-        <CardItem>
-          <Left>
-            <Thumbnail source={{ uri: profilePhoto }} />
-            <Body>
-              <Text>{title}</Text>
-              <Text note>{getDetailDate(createdAt)}</Text>
-            </Body>
-          </Left>
-        </CardItem>
+        <CardHeader
+          photo={profilePhoto}
+          title={title}
+          note={createdAt}
+        />
         <CardItem cardBody style={styles.cardBody}>
           <Image source={{ uri: url }} style={styles.image}/>
         </CardItem>
         <CardItem>
           <Left>
-            <Button transparent onPress={() => setModalVisible(!modalVisible)}>
+            <Button transparent onPress={_toggleModal}>
               <Text style={styles.icon}>결재 요청</Text>
             </Button>
           </Left>
@@ -78,15 +80,12 @@ export default function Report(props) {
           </Button>
         </CardItem>
       </Card>
-      <Modal isVisible={modalVisible}>
-        <View style={styles.modal}>
-          {/* 유저 아이디 넣어서 찾기 */}
-          <BottomButton
-            title='찾기'
-            onPress={() => setModalVisible(!modalVisible)}
-          />
-        </View>
-      </Modal>
+      <ReportModal
+        modalVisible={modalVisible}
+        closeModal={_toggleModal}
+        onUserSearch={onUserSearch}
+        onClick={_requestApproval}
+      />
     </Container>
   );
 }
@@ -112,5 +111,11 @@ const styles = StyleSheet.create({
   modal: {
     height: 300,
     backgroundColor: Colors.white
+  },
+  emailBox: {
+    width: 300,
+    height: 100,
+    alignSelf: 'center' ,
+    marginTop: 40,
   }
 });
