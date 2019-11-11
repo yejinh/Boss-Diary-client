@@ -9,7 +9,12 @@ export default function RequestsScreen(props) {
   const [ isAllLoaded, setIsAllLoaded ] = useState(false);
   const [ pageNumber, setPageNumber ] = useState(1);
 
-  const { profilePhoto, approvalRequests, fetchApprovalRequests } = props.screenProps;
+  const {
+    profilePhoto,
+    approvalRequests,
+    fetchApprovalRequests ,
+    onApprovalConfirm
+  } = props.screenProps;
 
   useEffect(() => {
     setIsLoading(true);
@@ -40,6 +45,26 @@ export default function RequestsScreen(props) {
     }
   };
 
+  const _clickApproval = reportId => () => {
+    Alert.alert(
+      '보고서 결재',
+      '결재 승인 후 취소할 수 없습니다. \n 보고서 결재를 승인하시겠습니까?',
+      [
+        {
+          text: '승인',
+          onPress: async() => {
+            await onApprovalConfirm(reportId);
+            Alert.alert('결재 승인', '해당 보고서 결재를 완료하였습니다');
+          }
+        },
+        {
+          text: '취소',
+          style: 'destructive',
+        },
+      ]
+    );
+  };
+
   const _footerSpinner = () => {
     if (isLoading) {
       return <LoadingSpinner />;
@@ -62,8 +87,9 @@ export default function RequestsScreen(props) {
         <Report
           buttonText={'결재 승인'}
           key={item._id}
-          profilePhoto={item.profile_photo}
           report={item}
+          onClick={_clickApproval(item._id)}
+          profilePhoto={item.profile_photo}
           isApprovalPage={true}
         />
       )}

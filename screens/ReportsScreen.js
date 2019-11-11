@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, FlatList, Alert } from 'react-native';
+import { SafeAreaView, FlatList, Alert, CameraRoll } from 'react-native';
 import LoadingSpinner from '../components/Spinner';
 import Report from '../components/Report';
 import ReportModal from '../components/ReportModal';
@@ -51,20 +51,66 @@ export default function ReportsScreen(props) {
     }
   };
 
+  const _saveToCameraRoll = url => async() => {
+    try {
+      Alert.alert(
+        '사진첩 저장',
+        '사진첩에 저장하시겠습니까?',
+        [
+          {
+            text: '저장',
+            onPress: async() => {
+              await CameraRoll.saveToCameraRoll(url, 'photo');
+              Alert.alert('사진첩 저장', '사진첩에 저장되었습니다');
+            }
+          },
+          {
+            text: '취소',
+            style: 'destructive',
+          },
+        ]
+      );
+    } catch(err) {
+      Alert.alert('사진첩 저장 에러', '다시 시도해주세요');
+      console.log(err);
+    }
+  };
+
+  const _clickDelete = reportId => () => {
+    try {
+      Alert.alert(
+        '보고서 삭제',
+        '선택한 보고서를 삭제하시겠습니까?',
+        [
+          {
+            text: '삭제',
+            onPress: async() => {
+              await onDeleteReport(reportId);
+              Alert.alert('보고서 삭제', '보고서가 삭제되었습니다');
+            }
+          },
+          {
+            text: '취소',
+            style: 'destructive',
+          },
+        ]
+      );
+    } catch(err) {
+      Alert.alert('보고서 삭제 에러', '다시 시도해주세요');
+      console.log(err);
+    }
+  };
+
   const _toggleModal = () => {
     setModalVisible(!modalVisible);
   };
 
-  const _clickReport = itemId => () => {
-    setClickedReport(itemId)
-  };
-
-  const _clickDelete = itemId => () => {
-    onDeleteReport(itemId);
+  const _clickReport = reportId => () => {
+    setClickedReport(reportId);
   };
 
   const _requestApproval = userId => {
-    onApprovalRequest(clickedReport, userId);
+    onApprovalRequest(userId, clickedReport);
   };
 
   const _footerSpinner = () => {
@@ -93,8 +139,9 @@ export default function ReportsScreen(props) {
             report={item}
             openModal={_toggleModal}
             onUserSearch={onUserSearch}
-            onClick={_clickReport(item._id)}
+            onSaveClick={_saveToCameraRoll(item.url)}
             onDeleteClick={_clickDelete(item._id)}
+            onClick={_clickReport(item._id)}
             isApprovalPage={false}
           />
         )}

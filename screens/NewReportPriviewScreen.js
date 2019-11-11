@@ -62,8 +62,8 @@ export default function NewReportInputScreen(props) {
     await onReportSubmit(text, photo, template._id);
 
     Alert.alert(
-      '보고서 제출 완료',
-      `${template.name} 제출을 완료 후 상여금 500원이 지급되었습니다`,
+      `${template.name} 제출 완료`,
+      '상여금 500원이 지급되었습니다',
       [
         {
           text: '보고서 페이지 이동',
@@ -79,29 +79,29 @@ export default function NewReportInputScreen(props) {
 
   return (
     <Container>
-        <ImageBackground
-          style={styles.container}
-          source={{ uri: template.url }}
-          ref={screen}
-        >
-          <View style={[styles.date, { fontFamily: fontFamily }]}>
-            <Text style={styles.text}>
-              {getToday}
-            </Text>
-          </View>
-          <View style={styles.createdBy}>
-            <Text style={styles.text}>
-              {userData.name}
-            </Text>
-          </View>
-          <View style={styles.textContainer}>
-            <Text
-              style={{ fontFamily: fontFamily, fontSize: fontSize }}
-            >
-              {text}
-            </Text>
-          </View>
-        </ImageBackground>
+      <ImageBackground
+        style={styles.container}
+        source={{ uri: template.url }}
+        ref={screen}
+      >
+        <View style={[styles.date, { fontFamily: fontFamily }]}>
+          <Text style={styles.text}>
+            {getToday}
+          </Text>
+        </View>
+        <View style={styles.createdBy}>
+          <Text style={styles.text}>
+            {userData.name}
+          </Text>
+        </View>
+        <View style={styles.textContainer}>
+          <Text
+            style={{ fontFamily: fontFamily, fontSize: fontSize }}
+          >
+            {text}
+          </Text>
+        </View>
+      </ImageBackground>
       <View style={styles.fabConatiner}>
         <Fab
           active={isActive}

@@ -259,7 +259,7 @@ const dispatchUserSearch = dispatch => async(email) => {
   }
 };
 
-const dispatchApprovalRequest = dispatch => async(reportId, userId) => {
+const dispatchApprovalRequest = dispatch => async(userId, reportId) => {
   try {
     const accessToken = await getAccessToken();
 
@@ -270,7 +270,27 @@ const dispatchApprovalRequest = dispatch => async(reportId, userId) => {
         Authorization: `Bearer ${accessToken}`
       }
     });
+
   } catch(err) {
+    Alert.alert('승인 요청 에러', err.message);
+    console.log(err);
+  }
+};
+
+const dispatchApprovalConfirm = dispatch => async(reportId) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+
+    await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/confirm`, {
+      method: 'PUT',
+       headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+  } catch(err) {
+    Alert.alert('보고서 승인 에러', err.message);
     console.log(err);
   }
 };
@@ -290,7 +310,7 @@ const dispatchDeleteReport = dispatch => async(reportId) => {
 
     console.log(await res.json());
   } catch(err) {
-    Alert.alert('보고서 제출 에러', err.message);
+    Alert.alert('보고서 삭제 에러', err.message);
     console.log(err);
   }
 };
@@ -319,7 +339,7 @@ const reportsCalendarItem = userReports => {
       : acc[date] = [data];
     return acc;
   }, {});
-}
+};
 
 const mapStateToProps = state => ({
   userData: state.userData,
@@ -346,6 +366,7 @@ const mapDispatchToProps = dispatch => ({
   onReportSubmit: dispatchReportSubmit(dispatch),
   onUserSearch: dispatchUserSearch(dispatch),
   onApprovalRequest: dispatchApprovalRequest(dispatch),
+  onApprovalConfirm: dispatchApprovalConfirm(dispatch),
   onDeleteReport: dispatchDeleteReport(dispatch)
 });
 

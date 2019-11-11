@@ -18,6 +18,7 @@ export default function NewReportScreen(props) {
   useEffect(() => {
     const fetchData = async() => {
       await fetchUserTemplates(userData._id);
+
       setIsFetched(true);
     };
 
