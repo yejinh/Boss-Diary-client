@@ -63,7 +63,7 @@ export default function NewReportInputScreen(props) {
 
     Alert.alert(
       '보고서 제출 완료',
-      `${template.name} 제출을 완료하였습니다`,
+      `${template.name} 제출을 완료 후 상여금 500원이 지급되었습니다`,
       [
         {
           text: '보고서 페이지 이동',

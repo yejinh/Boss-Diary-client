@@ -275,6 +275,26 @@ const dispatchApprovalRequest = dispatch => async(reportId, userId) => {
   }
 };
 
+const dispatchDeleteReport = dispatch => async(reportId) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+
+    const res = await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}`, {
+      method: 'DELETE',
+       headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    console.log(await res.json());
+  } catch(err) {
+    Alert.alert('보고서 제출 에러', err.message);
+    console.log(err);
+  }
+};
+
 const reportsDateMark = userReports => {
   const dates = userReports.map(report => getDate(report.created_at));
 
@@ -325,7 +345,8 @@ const mapDispatchToProps = dispatch => ({
   onTemplateAdd: dispatchTemplateAdd(dispatch),
   onReportSubmit: dispatchReportSubmit(dispatch),
   onUserSearch: dispatchUserSearch(dispatch),
-  onApprovalRequest: dispatchApprovalRequest(dispatch)
+  onApprovalRequest: dispatchApprovalRequest(dispatch),
+  onDeleteReport: dispatchDeleteReport(dispatch)
 });
 
 const AppContainer = props => {

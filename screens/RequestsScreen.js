@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, FlatList, Alert } from 'react-native';
+import { SafeAreaView, FlatList, Alert } from 'react-native';
+import LoadingSpinner from '../components/Spinner';
+import Report from '../components/Report';
+import EmptyScreen from '../components/EmptyScreen';
 
 export default function RequestsScreen(props) {
   const [ isLoading, setIsLoading ] = useState(false);
   const [ isAllLoaded, setIsAllLoaded ] = useState(false);
   const [ pageNumber, setPageNumber ] = useState(1);
 
-  const { approvalRequests, fetchApprovalRequests } = props.screenProps;
+  const { profilePhoto, approvalRequests, fetchApprovalRequests } = props.screenProps;
 
   useEffect(() => {
+    setIsLoading(true);
     _loadMoreReports();
   }, []);
 
@@ -23,8 +27,7 @@ export default function RequestsScreen(props) {
         setIsAllLoaded(true);
 
         if (pageNumber === 1) {
-          Alert.alert('빈 보고서', '보고서를 작성하세요');
-          return <EmptyScreen message={'작성한 보고서가 없습니다'}/>;
+          return Alert.alert('결재 요청', '결재 요청이 없습니다');
         }
         return;
       }
@@ -36,9 +39,35 @@ export default function RequestsScreen(props) {
       console.log(err);
     }
   };
-  console.log(approvalRequests, 'test');
+
+  const _footerSpinner = () => {
+    if (isLoading) {
+      return <LoadingSpinner />;
+    }
+    return null;
+  };
+
+  if (isLoading) return <LoadingSpinner />;
+  if (!isLoading && !approvalRequests.length) return <EmptyScreen message={'보고서 결재 요청이 없습니다'}/>;
 
   return (
-    <View><Text>request!!</Text></View>
+    <SafeAreaView>
+      <FlatList
+      data={approvalRequests}
+      keyExtractor={item => item._id}
+      onEndReachedThreshold={0.01}
+      onEndReached={_loadMoreReports}
+      ListFooterComponent={_footerSpinner}
+      renderItem={({ item }) => (
+        <Report
+          buttonText={'결재 승인'}
+          key={item._id}
+          profilePhoto={item.profile_photo}
+          report={item}
+          isApprovalPage={true}
+        />
+      )}
+    />
+  </SafeAreaView>
   );
 }

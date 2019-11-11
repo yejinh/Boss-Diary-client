@@ -19,9 +19,11 @@ export default function ReportsScreen(props) {
     fetchUserReports,
     onUserSearch,
     onApprovalRequest,
+    onDeleteReport
   } = props.screenProps;
 
   useEffect(() => {
+    setIsLoading(true);
     _loadMoreReports();
   }, []);
 
@@ -36,8 +38,7 @@ export default function ReportsScreen(props) {
         setIsAllLoaded(true);
 
         if (pageNumber === 1) {
-          Alert.alert('빈 보고서', '보고서를 작성하세요');
-          return <EmptyScreen message={'작성한 보고서가 없습니다'}/>;
+          return Alert.alert('빈 보고서', '보고서를 작성하세요');
         }
         return;
       }
@@ -58,6 +59,10 @@ export default function ReportsScreen(props) {
     setClickedReport(itemId)
   };
 
+  const _clickDelete = itemId => () => {
+    onDeleteReport(itemId);
+  };
+
   const _requestApproval = userId => {
     onApprovalRequest(clickedReport, userId);
   };
@@ -70,6 +75,7 @@ export default function ReportsScreen(props) {
   };
 
   if (isLoading) return <LoadingSpinner />;
+  if (!isLoading && !userReports.length) return <EmptyScreen message={'작성한 보고서가 없습니다'}/>;
 
   return (
     <SafeAreaView>
@@ -82,11 +88,14 @@ export default function ReportsScreen(props) {
         renderItem={({ item }) => (
           <Report
             key={item._id}
+            buttonText={'결재 요청'}
             profilePhoto={profilePhoto}
             report={item}
             openModal={_toggleModal}
             onUserSearch={onUserSearch}
             onClick={_clickReport(item._id)}
+            onDeleteClick={_clickDelete(item._id)}
+            isApprovalPage={false}
           />
         )}
       />

@@ -1,14 +1,17 @@
+import React from 'react';
 import {
   createAppContainer,
   createSwitchNavigator,
-  createDrawerNavigator
+  createDrawerNavigator,
+  createStackNavigator
 } from 'react-navigation';
 
 import LoadingScreen from '../screens/LoadingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MainTab from './MainTabNavigator';
 import RequestsScreen from '../screens/RequestsScreen';
-import MyPageStack from './MyPageStackNavigator';
+import MyPageScreen from '../screens/MyPageScreen';
+import BurgerMenu from '../components/BurgerMenu';
 
 const mainDrawer = createDrawerNavigator(
   {
@@ -19,13 +22,29 @@ const mainDrawer = createDrawerNavigator(
       }
     },
     Requests: {
-      screen: RequestsScreen,
+      screen: createStackNavigator({
+        Requests: {
+          screen: RequestsScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '승인 요청',
+            headerLeft: () => <BurgerMenu nav = {navigation} />
+          })
+        }
+      }),
       navigationOptions: {
         drawerLabel: '승인 요청'
       }
     },
     Settings: {
-      screen: MyPageStack,
+      screen: createStackNavigator({
+        MyPage: {
+          screen: MyPageScreen,
+          navigationOptions: ({ navigation }) => ({
+            headerTitle: '활동 내역',
+            headerLeft: () => <BurgerMenu nav = {navigation} />
+          })
+        }
+      }),
       navigationOptions: {
         drawerLabel: '나의 페이지'
       }

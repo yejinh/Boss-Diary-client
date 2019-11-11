@@ -19,10 +19,13 @@ import Colors from '../constants/Colors';
 
 export default function Report(props) {
   const {
+    buttonText,
     profilePhoto,
     report,
     openModal,
-    onClick
+    onClick,
+    onDeleteClick,
+    isApprovalPage
   } = props;
   const { title, created_at: createdAt, url } = report;
 
@@ -51,8 +54,35 @@ export default function Report(props) {
     }
   };
 
+  const _delete = async() => {
+    try {
+      Alert.alert(
+        '보고서 삭제',
+        '선택한 보고서를 삭제하시겠습니까?',
+        [
+          {
+            text: '삭제',
+            onPress: async() => {
+              await onDeleteClick();
+              Alert.alert('보고서 삭제', '보고서가 삭제되었습니다');
+            }
+          },
+          {
+            text: '취소',
+            style: 'destructive',
+          },
+        ]
+      );
+    } catch(err) {
+      Alert.alert('보고서 삭제 에러', '다시 시도해주세요');
+      console.log(err);
+    }
+  };
+
   const _requestApproval = () => {
-    openModal();
+    if (openModal) {
+      openModal();
+    }
     onClick();
   };
 
@@ -70,15 +100,19 @@ export default function Report(props) {
         <CardItem>
           <Left>
             <Button transparent onPress={_requestApproval}>
-              <Text style={styles.icon}>결재 요청</Text>
+              <Text style={styles.icon}>{buttonText}</Text>
             </Button>
           </Left>
-          <Button transparent onPress={_saveToCameraRoll}>
-            <Icon active name='ios-download' style={styles.icon} />
-          </Button>
-          <Button transparent>
-            <Icon active name='ios-share-alt' style={styles.icon} />
-          </Button>
+          {!isApprovalPage &&
+            <>
+              <Button transparent onPress={_saveToCameraRoll}>
+                <Icon active name='ios-download' style={styles.icon} />
+              </Button>
+              <Button transparent onPress={_delete}>
+                <Icon active name='ios-trash' style={styles.icon} />
+              </Button>
+            </>
+          }
         </CardItem>
       </Card>
     </Container>
