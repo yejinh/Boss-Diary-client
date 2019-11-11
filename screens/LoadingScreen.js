@@ -15,6 +15,9 @@ export default function LoadingScreen(props) {
   async function _loadResourcesAsync() {
     try {
       await Promise.all([
+        Asset.loadAsync([
+          require('../assets/images/approved.png')
+        ]),
         Font.loadAsync({
           'myeongjo': require('../assets/fonts/JejuMyeongjo.ttf'),
           'batang': require('../assets/fonts/IropkeBatangM.ttf'),
