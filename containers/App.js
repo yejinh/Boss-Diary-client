@@ -11,7 +11,8 @@ import {
   fetchApprovalRequests,
   fetchUserTemplates,
   fetchTemplates,
-  addNewReport
+  addNewReport,
+  clearData,
 } from '../actions';
 import { getDate, getTime } from '../utils';
 
@@ -39,6 +40,19 @@ const dispatchFacebookData = dispatch => async(token) => {
     Alert.alert('로그인', `안녕하세요, ${name} 부장님`);
   } catch(err) {
     Alert.alert('로그인 에러', err.message);
+    console.log(err);
+  }
+};
+
+const dispatchLogout = dispatch => async() => {
+  try {
+    await dispatch(clearData());
+    await SecureStore.deleteItemAsync('ACCESS_TOKEN');
+    await SecureStore.deleteItemAsync('USER_ID');
+
+    return;
+  } catch(err) {
+    Alert.alert('로그아웃 에러', err.message);
     console.log(err);
   }
 };
@@ -174,7 +188,7 @@ const dispatchTemplateAdd = dispatch => async(templateId, price) => {
     const accessToken = await getAccessToken()
     const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${userId}/templates`, {
+    await fetch(`${API_URL}/api/users/${userId}/templates`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -367,7 +381,8 @@ const mapDispatchToProps = dispatch => ({
   onUserSearch: dispatchUserSearch(dispatch),
   onApprovalRequest: dispatchApprovalRequest(dispatch),
   onApprovalConfirm: dispatchApprovalConfirm(dispatch),
-  onDeleteReport: dispatchDeleteReport(dispatch)
+  onDeleteReport: dispatchDeleteReport(dispatch),
+  onUserLogout: dispatchLogout(dispatch)
 });
 
 const AppContainer = props => {

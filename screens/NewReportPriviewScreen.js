@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { captureRef } from 'react-native-view-shot';
 import {
   ImageBackground,
@@ -22,11 +23,17 @@ export default function NewReportInputScreen(props) {
   const [ isActive, setIsActive ] = useState(false);
   const [ fontSize, setFontSize ] = useState(20);
   const [ fontFamily, setFontFamily ] = useState('myeongjo');
-  const screen = useRef(null);
 
   const { navigation } = props;
   const { onReportSubmit, userData } = props.screenProps;
   const { text, template } = props.navigation.state.params;
+
+  const screen = useRef(null);
+
+  const _resetAction = StackActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName: 'NewReport' })],
+  });
 
   const _alert = () => {
     return (
@@ -46,6 +53,15 @@ export default function NewReportInputScreen(props) {
       )
     );
   }
+
+  const _moveToReportScreen = () => {
+    navigation.dispatch(_resetAction);
+    navigation.navigate('ReportsStack');
+  };
+
+  const _moveToNewReportScreen = () => {
+    navigation.navigate('NewReport');
+  };
 
   const _submit = async() => {
     const data = await captureRef(screen, {
@@ -67,11 +83,11 @@ export default function NewReportInputScreen(props) {
       [
         {
           text: '보고서 페이지 이동',
-          onPress: () => navigation.navigate('ReportsStack')
+          onPress: _moveToReportScreen
         },
         {
           text: '새로운 보고서 작성',
-          onPress: () => navigation.navigate('NewReport')
+          onPress: _moveToNewReportScreen
         }
       ]
     );
@@ -146,11 +162,11 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   date: {
-    marginTop: 102,
+    marginTop: 100,
     marginLeft: 125
   },
   createdBy: {
-    marginTop: 50,
+    marginTop: 48,
     marginLeft: 125
   },
   text: {

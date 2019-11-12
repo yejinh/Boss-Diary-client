@@ -9,9 +9,9 @@ import {
 import LoadingScreen from '../screens/LoadingScreen';
 import LoginScreen from '../screens/LoginScreen';
 import MainTab from './MainTabNavigator';
+import MyPage from './MyPageStackNavigator';
 import RequestsScreen from '../screens/RequestsScreen';
-import MyPageScreen from '../screens/MyPageScreen';
-import BurgerMenu from '../components/BurgerMenu';
+import HeaderMenu from '../components/HeaderMenu';
 
 const mainDrawer = createDrawerNavigator(
   {
@@ -27,7 +27,7 @@ const mainDrawer = createDrawerNavigator(
           screen: RequestsScreen,
           navigationOptions: ({ navigation }) => ({
             headerTitle: '승인 요청',
-            headerLeft: () => <BurgerMenu nav = {navigation} />
+            headerLeft: <HeaderMenu nav={navigation} name='ios-menu' />
           })
         }
       }),
@@ -36,19 +36,11 @@ const mainDrawer = createDrawerNavigator(
       }
     },
     Settings: {
-      screen: createStackNavigator({
-        MyPage: {
-          screen: MyPageScreen,
-          navigationOptions: ({ navigation }) => ({
-            headerTitle: '활동 내역',
-            headerLeft: () => <BurgerMenu nav = {navigation} />
-          })
-        }
-      }),
+      screen: MyPage,
       navigationOptions: {
         drawerLabel: '나의 페이지'
       }
-    }
+    },
   },
   {
     initialRouteName: 'Main'

@@ -3,7 +3,7 @@ import {
   createStackNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
-import BurgerMenu from '../components/BurgerMenu';
+import HeaderMenu from '../components/HeaderMenu';
 import TabBarIcon from '../components/TabBarIcon';
 import Colors from '../constants/Colors';
 
@@ -25,7 +25,7 @@ const ReportsStack = createStackNavigator(
       screen: ReportsScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: '보고서 보관함',
-        headerLeft: () => <BurgerMenu nav = {navigation} />
+        headerLeft: () => <HeaderMenu nav={navigation} name='ios-menu' />
       })
     }
   }
@@ -38,7 +38,7 @@ const NewReportStack = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: '보고서 작성',
         headerBackTitle: ' ',
-        headerLeft: () => <BurgerMenu nav = {navigation} />
+        headerLeft: <HeaderMenu nav={navigation} name='ios-menu' />
       })
     },
     NewReportInput: {
@@ -64,7 +64,7 @@ const TemplatesStack = createStackNavigator(
       navigationOptions: ({ navigation }) => ({
         headerTitle: '템플릿 구매',
         headerBackTitle: ' ',
-        headerLeft: () => <BurgerMenu nav = {navigation} />
+        headerLeft: <HeaderMenu nav = {navigation} />
       })
     },
     TemplateDetail: {

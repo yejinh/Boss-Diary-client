@@ -1,5 +1,5 @@
 import * as actionTypes from '../constants/actionType';
-import { ActionSheet } from 'native-base';
+import _ from 'lodash';
 const initialState = {
   userData: null,
   userReports: [],
@@ -11,7 +11,7 @@ const initialState = {
   numOfNewReport: 0
 };
 
-function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case actionTypes.FETCH_USER_DATA:
       return {
@@ -21,8 +21,6 @@ function reducer(state = initialState, action) {
       };
 
     case actionTypes.FETCH_USER_REPORTS:
-      // if (state.userReports[0] && state.userReports[0]._id === action.reports[0]._id) return state;
-
       return {
         ...state,
         userReports: state.userReports.concat(action.reports)
@@ -52,6 +50,13 @@ function reducer(state = initialState, action) {
         templates: action.templates
       };
 
+    case actionTypes.DELETE_REPORT:
+      return {
+        ...state,
+        userReports: _.filter(state.userReports, report => report._id !== action.reportId),
+        numOfNewReport: state.numOfNewReport - 1
+      };
+
     case actionTypes.ADD_NEW_REPORT:
       return {
         ...state,
@@ -59,9 +64,10 @@ function reducer(state = initialState, action) {
         numOfNewReport: state.numOfNewReport + 1
       };
 
+    case actionTypes.CLEAR_DATA:
+      return initialState;
+
     default:
       return state;
   }
 };
-
-export default reducer;

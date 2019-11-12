@@ -2,19 +2,26 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import TabBarIcon from './TabBarIcon';
 
-export default function BurgerMenu(props) {
+export default function HeaderMenu(props) {
+  const { nav, name, dir, screen } = props;
+
+  const _onClick = () => {
+    dir ? nav.navigate(screen) : nav.openDrawer();
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => props.nav.openDrawer()}
+      onPress={_onClick}
     >
-      <TabBarIcon name='ios-menu' />
+      <TabBarIcon name={name} />
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft: 20
+    marginLeft: 20,
+    marginRight: 20
   }
 });

@@ -41,3 +41,12 @@ export const addNewReport = newReport => ({
   type: actionType.ADD_NEW_REPORT,
   newReport
 });
+
+export const deleteReport = reportId => ({
+  type: actionType.DELETE_REPORT,
+  reportId
+});
+
+export const clearData = () => ({
+  type: actionType.CLEAR_DATA
+});

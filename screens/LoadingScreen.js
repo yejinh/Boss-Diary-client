@@ -12,7 +12,7 @@ export default function LoadingScreen(props) {
   const { navigation } = props;
   const { fetchUserData } = props.screenProps;
 
-  async function _loadResourcesAsync() {
+  const _loadResourcesAsync = async() => {
     try {
       await Promise.all([
         Asset.loadAsync([
@@ -26,8 +26,7 @@ export default function LoadingScreen(props) {
           ...Ionicons.font,
         }),
         Permissions.askAsync(
-          Permissions.CAMERA,
-          Permissions.CALENDAR
+          Permissions.CAMERA
         )
       ]);
 
@@ -36,21 +35,19 @@ export default function LoadingScreen(props) {
       Alert.alert('로딩 에러', err.message);
       console.log(err);
     }
-  }
+  };
 
-  function _handleLoadingError(error) {
+  const _handleLoadingError = error => {
     Alert.alert('로딩 에러', err.message);
     console.warn(error);
-  }
+  };
 
-  async function _navigateLoginScreen() {
+  const _navigateLoginScreen = async() => {
     try {
       if (isReady) {
         const access_token = await SecureStore.getItemAsync('ACCESS_TOKEN');
 
         if (access_token) {
-          await fetchUserData();
-
           return navigation.navigate('App');
         }
 
@@ -60,7 +57,7 @@ export default function LoadingScreen(props) {
       Alert.alert('로딩 에러', err.message);
       console.log(err);
     }
-  }
+  };
 
   return (
     <AppLoading

@@ -7,7 +7,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert
 } from 'react-native';
 import Color from '../constants/Colors';
 
@@ -17,7 +16,7 @@ export default function LoginScreen(props) {
   const { navigation } = props;
   const { fetchFacebookData } = props.screenProps;
 
-  async function _login() {
+  const _login = async() => {
     try {
       const { type, token } = await Facebook.logInWithReadPermissionsAsync(
         FACEBOOK_APP_ID,
@@ -86,7 +85,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 350,
+    marginTop: 300,
     fontSize: 5
   },
   button: {

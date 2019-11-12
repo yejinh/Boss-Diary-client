@@ -16,6 +16,7 @@ export default function ReportsScreen(props) {
     userReports,
     profilePhoto,
     numOfNewReport,
+    fetchUserData,
     fetchUserReports,
     onUserSearch,
     onApprovalRequest,
@@ -25,6 +26,7 @@ export default function ReportsScreen(props) {
   useEffect(() => {
     setIsLoading(true);
     _loadMoreReports();
+    fetchUserData();
   }, []);
 
   const _loadMoreReports = async() => {
