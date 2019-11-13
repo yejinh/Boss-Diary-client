@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   emailBox: {
     width: 300,
     height: 100,
-    alignSelf: 'center' ,
+    alignSelf: 'center',
     marginTop: 40,
   }
 });

@@ -25,11 +25,12 @@ const dispatchFacebookData = dispatch => async(token) => {
   try {
     const FBres = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=email,name,picture.type(large)`);
     const { name, email, picture } = await FBres.json();
+    const profilePhoto = picture.data.url;
 
     const res = await fetch(`${API_URL}/api/auth/authenticate`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ email, name, picture })
+      body: JSON.stringify({ email, name, profilePhoto })
     });
 
     const { user_id, access_token } = await res.json();
@@ -238,7 +239,7 @@ const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
 
     const res = await fetch(`${API_URL}/api/users/${userId}/reports`, {
       method: 'POST',
-       headers: {
+      headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       },
@@ -260,7 +261,7 @@ const dispatchUserSearch = dispatch => async(email) => {
 
     const res = await fetch(`${API_URL}/api/users/email/${email}`, {
       method: 'GET',
-       headers: {
+      headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       }
@@ -279,7 +280,7 @@ const dispatchApprovalRequest = dispatch => async(userId, reportId) => {
 
     await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/request`, {
       method: 'PUT',
-       headers: {
+      headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       }
@@ -298,7 +299,7 @@ const dispatchApprovalConfirm = dispatch => async(reportId) => {
 
     await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/confirm`, {
       method: 'PUT',
-       headers: {
+      headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       }
@@ -316,7 +317,7 @@ const dispatchDeleteReport = dispatch => async(reportId) => {
 
     const res = await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}`, {
       method: 'DELETE',
-       headers: {
+      headers: {
         'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${accessToken}`
       }

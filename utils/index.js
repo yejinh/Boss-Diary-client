@@ -22,7 +22,7 @@ export const getTime = date => {
   }
 
   return format(new Date(date), '오후 h시 m분');
-}
+};
 
 export const local = {
   monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],

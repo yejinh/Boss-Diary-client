@@ -36,7 +36,7 @@ export default function MyPageScreen(props) {
       } catch(err) {
         console.log(err);
       }
-    }
+    };
     fetchData();
   }, []);
 
@@ -69,12 +69,12 @@ export default function MyPageScreen(props) {
         </View>
         <View>
           {isFetched
-          ?  <Calendar
+            ?  <Calendar
               reports={userReports}
               reportDates={reportsDateMark}
               reportItems={reportsCalendarItem}
             />
-          : <LoadingSpinner />
+            : <LoadingSpinner />
           }
         </View>
       </ScrollView>

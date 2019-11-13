@@ -52,7 +52,7 @@ export default function NewReportInputScreen(props) {
         ]
       )
     );
-  }
+  };
 
   const _moveToReportScreen = () => {
     navigation.dispatch(_resetAction);

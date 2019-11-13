@@ -10,7 +10,6 @@ import { Ionicons } from '@expo/vector-icons';
 export default function LoadingScreen(props) {
   const [ isReady, setIsReady ] = useState(false);
   const { navigation } = props;
-  const { fetchUserData } = props.screenProps;
 
   const _loadResourcesAsync = async() => {
     try {
@@ -37,9 +36,9 @@ export default function LoadingScreen(props) {
     }
   };
 
-  const _handleLoadingError = error => {
+  const _handleLoadingError = err => {
     Alert.alert('로딩 에러', err.message);
-    console.warn(error);
+    console.warn(err);
   };
 
   const _navigateLoginScreen = async() => {

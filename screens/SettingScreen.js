@@ -1,5 +1,4 @@
 import React from 'react';
-import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
 import {
   Container,

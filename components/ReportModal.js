@@ -43,7 +43,6 @@ export default function ReportModal(props) {
       setUser(searchedUser);
     } catch(err) {
       Alert.alert('사용자 검색 에러', '다시 시도해주세요');
-      console.log(err);
     }
   };
 
@@ -75,7 +74,6 @@ export default function ReportModal(props) {
       );
     } catch(err) {
       Alert.alert('결재 요청 에러', '다시 시도해주세요');
-      console.log(err);
     }
   };
 
@@ -91,48 +89,48 @@ export default function ReportModal(props) {
       isVisible={modalVisible}
       onRequestClose={_closeModal}
     >
-        <View style={styles.modal}>
-          <Form>
-            <TouchableOpacity
-              activeOpacity={1}
-              onPressOut={_closeModal}
-            >
-              <Header>
-                <Text>이메일 주소로 과장님을 검색해 결재 요청을 보내세요</Text>
-              </Header>
-            </TouchableOpacity>
-            {!error
-              ? <View style={styles.emailBox}>
-                {!user
-                  ? <Item floatingLabel>
-                      <Label>Email</Label>
-                      <Input
-                        autoCompleteType='email'
-                        onChangeText={email => setEmail(email)}
-                        placeholder={'example@example.com'}
-                        value={email}
-                      />
-                    </Item>
-                  :  <CardHeader
-                      photo={user.profilePhoto}
-                      title={user.name}
-                    />
-                }
-                </View>
-              : <View style={styles.emailBox}>
-                  <Item floatingLabel error onPress={() => setError(false)}>
-                    <Label>Email</Label>
-                    <Input value={'잘못된 이메일 입니다'} />
-                    <Icon active name='ios-close-circle' />
-                  </Item>
-                </View>
-            }
-          </Form>
-          <BottomButton
-            title={!user ? '검색' : '요청 보내기'}
-            onPress={!user ? _onUserSearch : _onApprovalRequest}
-          />
-        </View>
+      <View style={styles.modal}>
+        <Form>
+          <TouchableOpacity
+            activeOpacity={1}
+            onPressOut={_closeModal}
+          >
+            <Header>
+              <Text>이메일 주소로 과장님을 검색해 결재 요청을 보내세요</Text>
+            </Header>
+          </TouchableOpacity>
+          {!error
+            ? <View style={styles.emailBox}>
+              {!user
+                ? <Item floatingLabel>
+                  <Label>Email</Label>
+                  <Input
+                    autoCompleteType='email'
+                    onChangeText={email => setEmail(email)}
+                    placeholder={'example@example.com'}
+                    value={email}
+                  />
+                </Item>
+                : <CardHeader
+                  photo={user.profilePhoto}
+                  title={user.name}
+                />
+              }
+            </View>
+            : <View style={styles.emailBox}>
+              <Item floatingLabel error onPress={() => setError(false)}>
+                <Label>Email</Label>
+                <Input value={'잘못된 이메일 입니다'} />
+                <Icon active name='ios-close-circle' />
+              </Item>
+            </View>
+          }
+        </Form>
+        <BottomButton
+          title={!user ? '검색' : '요청 보내기'}
+          onPress={!user ? _onUserSearch : _onApprovalRequest}
+        />
+      </View>
     </Modal>
   );
 }

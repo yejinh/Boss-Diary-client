@@ -10,7 +10,6 @@ export default function RequestsScreen(props) {
   const [ pageNumber, setPageNumber ] = useState(1);
 
   const {
-    profilePhoto,
     approvalRequests,
     fetchApprovalRequests ,
     onApprovalConfirm
@@ -78,22 +77,22 @@ export default function RequestsScreen(props) {
   return (
     <SafeAreaView>
       <FlatList
-      data={approvalRequests}
-      keyExtractor={item => item._id}
-      onEndReachedThreshold={0.01}
-      onEndReached={_loadMoreReports}
-      ListFooterComponent={_footerSpinner}
-      renderItem={({ item }) => (
-        <Report
-          buttonText={'결재 승인'}
-          key={item._id}
-          report={item}
-          onClick={_clickApproval(item._id)}
-          profilePhoto={item.profile_photo}
-          isApprovalPage={true}
-        />
-      )}
-    />
-  </SafeAreaView>
+        data={approvalRequests}
+        keyExtractor={item => item._id}
+        onEndReachedThreshold={0.01}
+        onEndReached={_loadMoreReports}
+        ListFooterComponent={_footerSpinner}
+        renderItem={({ item }) => (
+          <Report
+            buttonText={'결재 승인'}
+            key={item._id}
+            report={item}
+            onClick={_clickApproval(item._id)}
+            profilePhoto={item.profile_photo}
+            isApprovalPage={true}
+          />
+        )}
+      />
+    </SafeAreaView>
   );
 }

@@ -32,7 +32,7 @@ export default function Calendar(props) {
       markedDates={reportDates}
       items={reportItems}
       renderItem={item => <CalendarItem item={item} />}
-      renderDay={(day, item) => <View style={styles.day}><Text style={styles.dayText}>{`${day ? `${day.day}일` : ''}`}</Text></View>}
+      renderDay={day => <View style={styles.day}><Text style={styles.dayText}>{`${day ? `${day.day}일` : ''}`}</Text></View>}
       renderEmptyData = {() => <EmptyScreen message={'선택한 날짜에 작성한 보고서가 없습니다'}/>}
       rowHasChanged={(r1, r2) => r1.text !== r2.text}
     />

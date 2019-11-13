@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Container,
-  Card,
   CardItem,
   Thumbnail,
-  View,
   Text,
-  Button,
-  Icon,
   Left,
-  Header,
   Body,
-  Form,
-  Item,
-  Label,
-  Input
 } from 'native-base';
 import { getDetailDate } from '../utils';
 
