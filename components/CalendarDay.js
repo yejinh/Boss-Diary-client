@@ -1,14 +1,25 @@
 import React from 'react';
-import { Container, Text } from 'native-base';
+import { View, Text, StyleSheet } from 'react-native';
 
 export default function CalendarDay(props) {
   const { day } = props;
 
   return (
-    <Container>
-      <Text>
-        {day ? day.day : ''}
+    <View style={styles.day}>
+      <Text style={styles.dayText}>
+        {day ? `${day.day}일` : ''}
       </Text>
-    </Container>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  day: {
+    alignSelf: 'center'
+  },
+  dayText: {
+    width: 60,
+    fontSize: 25,
+    textAlign: 'center'
+  }
+});

@@ -12,6 +12,7 @@ import {
   fetchUserTemplates,
   fetchTemplates,
   addNewReport,
+  deleteReport,
   clearData,
 } from '../actions';
 import { getDate, getTime } from '../utils';
@@ -262,7 +263,7 @@ const dispatchUserSearch = dispatch => async(email) => {
     const res = await fetch(`${API_URL}/api/users/email/${email}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
       }
     });
@@ -281,7 +282,7 @@ const dispatchApprovalRequest = dispatch => async(userId, reportId) => {
     await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/request`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
       }
     });
@@ -300,7 +301,7 @@ const dispatchApprovalConfirm = dispatch => async(reportId) => {
     await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}/confirm`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
       }
     });
@@ -315,15 +316,15 @@ const dispatchDeleteReport = dispatch => async(reportId) => {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
 
-    const res = await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}`, {
+    await fetch(`${API_URL}/api/users/${userId}/reports/${reportId}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${accessToken}`
       }
     });
 
-    console.log(await res.json());
+    dispatch(deleteReport(reportId));
   } catch(err) {
     Alert.alert('보고서 삭제 에러', err.message);
     console.log(err);

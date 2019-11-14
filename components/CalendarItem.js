@@ -17,7 +17,7 @@ export default function CalendarItem(props) {
         <CardItem header>
           <Text>{item.title}</Text>
         </CardItem>
-        <CardItem button onPress={() => alert('This is Card Header')}>
+        <CardItem button>
           <Body>
             <Text>{item.body}</Text>
           </Body>
