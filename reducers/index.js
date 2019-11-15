@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/actionType';
 import _ from 'lodash';
+
 const initialState = {
   userData: null,
   userReports: [],
@@ -55,6 +56,19 @@ export default function reducer(state = initialState, action) {
       ...state,
       userReports: _.filter(state.userReports, report => report._id !== action.reportId),
       numOfNewReport: state.numOfNewReport - 1
+    };
+
+  case actionTypes.REFRESH_REPORTS:
+    return {
+      ...state,
+      userReports: action.reports,
+      numOfNewReport: 0
+    };
+
+  case actionTypes.REFRESH_REQUESTS:
+    return {
+      ...state,
+      approvalRequests: action.reports
     };
 
   case actionTypes.ADD_NEW_REPORT:

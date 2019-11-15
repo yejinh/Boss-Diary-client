@@ -36,7 +36,7 @@ export default function NewReportScreen(props) {
             <Template
               key={template._id}
               template={template}
-              navigation={navigation}
+              nav={navigation}
               path={'NewReportInput'}
             />
           ))}

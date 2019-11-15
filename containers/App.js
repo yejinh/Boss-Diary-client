@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import * as Facebook from 'expo-facebook';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
 import AppNavigator from '../navigation/AppNavigator';
@@ -11,19 +12,28 @@ import {
   fetchApprovalRequests,
   fetchUserTemplates,
   fetchTemplates,
+  refreshUserReports,
+  refreshRequests,
   addNewReport,
   deleteReport,
   clearData,
 } from '../actions';
 import { getDate, getTime } from '../utils';
 
-const { API_URL } = getEnvVars();
+const { API_URL, FACEBOOK_APP_ID } = getEnvVars();
 
 const getAccessToken = async() => await SecureStore.getItemAsync('ACCESS_TOKEN');
 const getUserId = async() => await SecureStore.getItemAsync('USER_ID');
 
-const dispatchFacebookData = dispatch => async(token) => {
+const dispatchFacebookData = dispatch => async() => {
   try {
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(
+      FACEBOOK_APP_ID,
+      { permissions: ['public_profile', 'email'] }
+    );
+
+    if (type !== 'success') return;
+
     const FBres = await fetch(`https://graph.facebook.com/me?access_token=${token}&fields=email,name,picture.type(large)`);
     const { name, email, picture } = await FBres.json();
     const profilePhoto = picture.data.url;
@@ -275,6 +285,62 @@ const dispatchUserSearch = dispatch => async(email) => {
   }
 };
 
+const dispatchRefreshReports = dispatch => async(pageNumber) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+    const query = `page?page_number=${pageNumber}&page_size=2&skip_page=0`;
+
+    const api = `${API_URL}/api/users/${userId}/reports/${query}`;
+
+    const res = await fetch(api, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { reports } = await res.json();
+
+    if (reports.length) {
+      dispatch(refreshUserReports(reports));
+    }
+
+    return reports;
+  } catch(err) {
+    console.log(err);
+  }
+};
+
+const dispatchRefreshRequests = dispatch => async(pageNumber) => {
+  try {
+    const accessToken = await getAccessToken();
+    const userId = await getUserId();
+    const query = `page?page_number=${pageNumber}&page_size=2`;
+
+    const api = `${API_URL}/api/users/${userId}/reports/requests/${query}`;
+
+    const res = await fetch(api, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`
+      }
+    });
+
+    const { reports } = await res.json();
+
+    if (reports.length) {
+      dispatch(refreshRequests(reports));
+    }
+
+    return reports;
+  } catch(err) {
+    console.log(err);
+  }
+};
+
 const dispatchApprovalRequest = dispatch => async(userId, reportId) => {
   try {
     const accessToken = await getAccessToken();
@@ -286,7 +352,6 @@ const dispatchApprovalRequest = dispatch => async(userId, reportId) => {
         Authorization: `Bearer ${accessToken}`
       }
     });
-
   } catch(err) {
     Alert.alert('승인 요청 에러', err.message);
     console.log(err);
@@ -381,6 +446,8 @@ const mapDispatchToProps = dispatch => ({
   onTemplateAdd: dispatchTemplateAdd(dispatch),
   onReportSubmit: dispatchReportSubmit(dispatch),
   onUserSearch: dispatchUserSearch(dispatch),
+  onRefreshReports: dispatchRefreshReports(dispatch),
+  onRefreshRequests: dispatchRefreshRequests(dispatch),
   onApprovalRequest: dispatchApprovalRequest(dispatch),
   onApprovalConfirm: dispatchApprovalConfirm(dispatch),
   onDeleteReport: dispatchDeleteReport(dispatch),

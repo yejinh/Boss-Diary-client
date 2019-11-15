@@ -7,6 +7,7 @@ import EmptyScreen from '../components/EmptyScreen';
 
 export default function ReportsScreen(props) {
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isRefreshing, setIsRefreshing ] = useState(false);
   const [ isAllLoaded, setIsAllLoaded ] = useState(false);
   const [ modalVisible, setModalVisible ] = useState(false);
   const [ clickedReport, setClickedReport ] = useState(null);
@@ -19,6 +20,7 @@ export default function ReportsScreen(props) {
     fetchUserData,
     fetchUserReports,
     onUserSearch,
+    onRefreshReports,
     onApprovalRequest,
     onDeleteReport
   } = props.screenProps;
@@ -50,6 +52,21 @@ export default function ReportsScreen(props) {
     } catch(err) {
       setIsLoading(false);
       console.log(err);
+    }
+  };
+
+  const _refresh = async() => {
+    try {
+      setIsRefreshing(true);
+
+      await onRefreshReports(1);
+
+      setPageNumber(2);
+      setIsRefreshing(false);
+      setIsAllLoaded(false);
+    } catch(err) {
+      setPageNumber(2);
+      setIsRefreshing(false);
     }
   };
 
@@ -130,7 +147,9 @@ export default function ReportsScreen(props) {
       <FlatList
         data={userReports}
         keyExtractor={item => item._id}
-        onEndReachedThreshold={0.01}
+        refreshing={isRefreshing}
+        onRefresh={_refresh}
+        onEndReachedThreshold={0.05}
         onEndReached={_loadMoreReports}
         ListFooterComponent={_footerSpinner}
         renderItem={({ item }) => (

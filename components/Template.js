@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 
 export default function Template(props) {
-  const { navigation, template, path } = props;
+  const { nav, template, path } = props;
 
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate(path, { template: template })}
+      onPress={() => nav.navigate(path, { template: template })}
     >
       <View style={styles.templateContainer}>
         <Image

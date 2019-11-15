@@ -20,6 +20,26 @@ export default function SettingsScreen(props) {
     url
   } = props.navigation.state.params.template;
 
+  const _onClick = () => {
+    Alert.alert('보고서 구입', `${name}를 구입 하시겠습니까?`,
+        [
+          {
+            text: '구입',
+            onPress: () => {
+              onTemplateAdd(templateId, points);
+              Alert.alert('보고서 구입 완료', `${name}를 구입 하였습니다`);
+              navigation.navigate('Templates');
+            }
+          },
+          {
+            text: '취소',
+            onPress: () => navigation.navigate('Templates'),
+            style: 'destructive',
+          }
+        ]
+      );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -31,25 +51,7 @@ export default function SettingsScreen(props) {
           <View>
             <Text>{points} points</Text>
             <Button
-              onPress={() => {
-                Alert.alert('보고서 구입', `${name}를 구입 하시겠습니까?`,
-                  [
-                    {
-                      text: '구입',
-                      onPress: () => {
-                        onTemplateAdd(templateId, points);
-                        Alert.alert('보고서 구입 완료', `${name}를 구입 하였습니다`);
-                        navigation.navigate('Templates');
-                      }
-                    },
-                    {
-                      text: '취소',
-                      onPress: () => navigation.navigate('Templates'),
-                      style: 'destructive',
-                    }
-                  ]
-                );
-              }}
+              onPress={_onClick}
               title='구매하기'
             />
           </View>

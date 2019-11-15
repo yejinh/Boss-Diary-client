@@ -1,7 +1,9 @@
 module.exports = {
   "env": {
     "browser": true,
-    "es6": true
+    "es6": true,
+    "node": true,
+    "jest": true
   },
   "extends": "eslint:recommended",
   "globals": {
@@ -16,31 +18,29 @@ module.exports = {
     "sourceType": "module"
   },
   "plugins": [
-    "react"
+    "react",
+    "detox",
+    "enzyme"
   ],
-  'rules': {
-    'indent': [
-      'error',
+  "rules": {
+    "indent": [
+      "error",
       2
     ],
-    'linebreak-style': [
-      'error',
-      'unix'
+    "linebreak-style": [
+      "error",
+      "unix"
     ],
-    'quotes': [
-      'error',
-      'single'
+    "quotes": [
+      "error",
+      "single"
     ],
-    'semi': [
-      'error',
-      'always'
+    "semi": [
+      "error",
+      "always"
     ],
-    "no-trailing-spaces": 0,
-    "keyword-spacing": 0,
+    "enzyme/no-shallow": 2,
     "no-unused-vars": 1,
-    "no-multiple-empty-lines": 0,
-    "space-before-function-paren": 0,
-    "eol-last": 0,
     "no-console": 1,
     "no-empty": 1,
     "no-irregular-whitespace": 1

@@ -6,12 +6,14 @@ import EmptyScreen from '../components/EmptyScreen';
 
 export default function RequestsScreen(props) {
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isRefreshing, setIsRefreshing ] = useState(false);
   const [ isAllLoaded, setIsAllLoaded ] = useState(false);
   const [ pageNumber, setPageNumber ] = useState(1);
 
   const {
     approvalRequests,
-    fetchApprovalRequests ,
+    fetchApprovalRequests,
+    onRefreshRequests,
     onApprovalConfirm
   } = props.screenProps;
 
@@ -41,6 +43,22 @@ export default function RequestsScreen(props) {
     } catch(err) {
       setIsLoading(false);
       console.log(err);
+    }
+  };
+
+  const _refresh = async() => {
+    try {
+      setIsRefreshing(true);
+
+      await onRefreshRequests(1);
+
+      setPageNumber(2);
+      setIsRefreshing(false);
+      setIsAllLoaded(false);
+
+    } catch(err) {
+      setPageNumber(2);
+      setIsRefreshing(false);
     }
   };
 
@@ -79,7 +97,9 @@ export default function RequestsScreen(props) {
       <FlatList
         data={approvalRequests}
         keyExtractor={item => item._id}
-        onEndReachedThreshold={0.01}
+        refreshing={isRefreshing}
+        onRefresh={_refresh}
+        onEndReachedThreshold={0.05}
         onEndReached={_loadMoreReports}
         ListFooterComponent={_footerSpinner}
         renderItem={({ item }) => (

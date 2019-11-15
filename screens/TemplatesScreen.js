@@ -26,7 +26,7 @@ export default function TemplatesScreen(props) {
             <Template
               key={template._id}
               template={template}
-              navigation={navigation}
+              nav={navigation}
               path={'TemplateDetail'}
             />
           ))}

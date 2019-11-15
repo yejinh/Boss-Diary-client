@@ -1,16 +1,13 @@
 import React from 'react';
-import * as Facebook from 'expo-facebook';
-import getEnvVars from '../environment';
 import {
   ScrollView,
   StyleSheet,
+  Alert,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import Color from '../constants/Colors';
-
-const { FACEBOOK_APP_ID } = getEnvVars();
 
 export default function LoginScreen(props) {
   const { navigation } = props;
@@ -18,18 +15,12 @@ export default function LoginScreen(props) {
 
   const _login = async() => {
     try {
-      const { type, token } = await Facebook.logInWithReadPermissionsAsync(
-        FACEBOOK_APP_ID,
-        { permissions: ['public_profile', 'email'] }
-      );
-
-      if (type === 'success') {
-        await fetchFacebookData(token);
+        await fetchFacebookData();
 
         navigation.navigate('Main');
-      }
     } catch(err) {
       console.log(err);
+      navigation.navigate('Login');
     }
   }
 
@@ -43,7 +34,7 @@ export default function LoginScreen(props) {
           <Text style={styles.titleText}>부장님의 보고서</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={_login}>
+          <TouchableOpacity testID='welcome' onPress={_login}>
             <Text style={styles.button}>보고서 작성 시작하기</Text>
           </TouchableOpacity>
         </View>

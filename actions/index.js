@@ -3,13 +3,7 @@ import * as actionType from '../constants/actionType';
 export const fetchUserData = userData => ({
   type: actionType.FETCH_USER_DATA,
   userData,
-  userId: userData._id,
-  email: userData.email,
-  name: userData.name,
-  points: userData.points,
   profilePhoto: userData.profile_photo,
-  reports: userData.reports,
-  templates: userData.templates
 });
 
 export const fetchUserReports = reports => ({
@@ -40,6 +34,16 @@ export const fetchTemplates = templates => ({
 export const addNewReport = newReport => ({
   type: actionType.ADD_NEW_REPORT,
   newReport
+});
+
+export const refreshUserReports = reports => ({
+  type: actionType.REFRESH_REPORTS,
+  reports
+});
+
+export const refreshRequests = reports => ({
+  type: actionType.REFRESH_REQUESTS,
+  reports
 });
 
 export const deleteReport = reportId => ({

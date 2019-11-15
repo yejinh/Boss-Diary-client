@@ -6,10 +6,14 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "e2e": "detox test --configuration ios.sim"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
+    ]
   },
   "dependencies": {
     "@expo/samples": "~3.0.3",
@@ -41,9 +45,29 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^7.0.0",
+    "detox": "^14.7.1",
+    "detox-expo-helpers": "^0.6.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "eslint": "^6.6.0",
+    "eslint-plugin-enzyme": "^0.1.1",
     "eslint-plugin-react": "^7.16.0",
-    "jest-expo": "^35.0.0"
+    "expo-detox-hook": "^1.0.10",
+    "jest": "^24.9.0",
+    "jest-enzyme": "^7.1.2",
+    "jest-expo": "^35.0.0",
+    "react-native-testing-library": "^1.11.1",
+    "react-test-renderer": "^16.11.0"
   },
-  "private": true
+  "private": true,
+  "detox": {
+    "test-runner": "jest",
+    "configurations": {
+      "ios.sim": {
+        "binaryPath": "bin/Exponent.app",
+        "type": "ios.simulator",
+        "name": "iPhone Xs"
+      }
+    }
+  }
 }
