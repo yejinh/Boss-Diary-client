@@ -27,8 +27,8 @@ export default function ReportsScreen(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    _loadMoreReports();
     fetchUserData();
+    _loadMoreReports();
   }, []);
 
   const _loadMoreReports = async() => {

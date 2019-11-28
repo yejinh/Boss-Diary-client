@@ -3,7 +3,7 @@
     "name": "boss-diary",
     "slug": "boss-diary",
     "privacy": "public",
-    "sdkVersion": "35.0.0",
+    "sdkVersion": "36.0.0",
     "platforms": [
       "ios",
       "android",
@@ -32,7 +32,13 @@
           "NSAllowsArbitraryLoadsForMedia": true,
           "NSAllowsArbitraryLoadsInWebContent": true,
           "NSExceptionAllowsInsecureHTTPLoads": true
-        }
+        },
+        "LSApplicationQueriesSchemes": ["facebook"],
+        "facebookScheme": {
+          "CFBundleURLSchemes": "fb2389234301327284",
+        },
+        "facebookAppId": "2389234301327284",
+        "facebookDisplayName": "Boss Diary"
       }
     }
   }

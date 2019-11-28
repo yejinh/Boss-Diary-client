@@ -26,6 +26,7 @@ export default function Report(props) {
     onClick,
     isApprovalPage
   } = props;
+
   const { title, created_at: createdAt, url, approvals } = report;
   const allApprovals = approvals.map(report => report.approved);
   const isApproved = _.includes(allApprovals, true);

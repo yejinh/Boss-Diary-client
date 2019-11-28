@@ -75,11 +75,11 @@ export default function NewReportInputScreen(props) {
       type: 'multipart/form-data',
     };
 
-    await onReportSubmit(text, photo, template._id);
+    await onReportSubmit(template.name, text, photo, template._id);
 
     Alert.alert(
       `${template.name} 제출 완료`,
-      '상여금 500원이 지급되었습니다',
+      '상여금이 지급되었습니다',
       [
         {
           text: '보고서 페이지 이동',
@@ -162,12 +162,12 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   date: {
-    marginTop: 100,
-    marginLeft: 125
+    marginTop: 170,
+    marginLeft: 50
   },
   createdBy: {
-    marginTop: 48,
-    marginLeft: 125
+    marginTop: 10,
+    marginLeft: 50
   },
   text: {
     fontSize: 12,
@@ -175,9 +175,9 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     height: 300,
-    marginTop: 70,
-    marginLeft: 30,
-    marginRight: 30
+    marginTop: 50,
+    marginLeft: 50,
+    marginRight: 50
   },
   mainFab: {
     backgroundColor: Colors.deepGray

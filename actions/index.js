@@ -36,6 +36,11 @@ export const addNewReport = newReport => ({
   newReport
 });
 
+export const addNewTemplate = newTemplate => ({
+  type: actionType.ADD_NEW_TEMPLATE,
+  newTemplate
+});
+
 export const refreshUserReports = reports => ({
   type: actionType.REFRESH_REPORTS,
   reports

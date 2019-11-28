@@ -96,7 +96,9 @@ export default function ReportModal(props) {
             onPressOut={_closeModal}
           >
             <Header>
-              <Text>이메일 주소로 과장님을 검색해 결재 요청을 보내세요</Text>
+              <Text style={styles.modalMessage}>
+                이메일 주소로 과장님을 검색해 결재 요청을 보내세요
+              </Text>
             </Header>
           </TouchableOpacity>
           {!error
@@ -139,6 +141,9 @@ const styles = StyleSheet.create({
   modal: {
     height: 300,
     backgroundColor: Colors.white
+  },
+  modalMessage: {
+    fontSize: 13
   },
   emailBox: {
     width: 300,

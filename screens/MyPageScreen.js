@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Image,
+  SafeAreaView,
   ScrollView,
   StyleSheet,
+  YellowBox,
+  Image,
   Text,
   View
 } from 'react-native';
@@ -19,13 +21,19 @@ export default function MyPageScreen(props) {
     reportsDateMark,
     reportsCalendarItem
   } = props.screenProps;
+
   const {
     name,
     profile_photo,
     points,
-    reports,
     templates
   } = userData;
+
+  YellowBox.ignoreWarnings([
+    'VirtualizedLists should never be nested',
+    'componentWillReceiveProps has been renamed',
+    'componentWillMount has been renamed'
+  ]);
 
   useEffect(() => {
     const fetchData = async() => {
@@ -40,11 +48,13 @@ export default function MyPageScreen(props) {
     fetchData();
   }, []);
 
+  if (!isFetched) return <LoadingSpinner />;
+
   const infoName = [ '상여금', '보고서', '템플릿' ];
-  const userInfo = [ points, reports.length, templates.length ];
+  const userInfo = [ points, userReports.length, templates.length ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <View style={styles.userProfileContainer}>
           <View style={styles.userProfile}>
@@ -68,17 +78,14 @@ export default function MyPageScreen(props) {
           </View>
         </View>
         <View>
-          {isFetched
-            ?  <Calendar
-              reports={userReports}
-              reportDates={reportsDateMark}
-              reportItems={reportsCalendarItem}
-            />
-            : <LoadingSpinner />
-          }
+          <Calendar
+            reports={userReports}
+            reportDates={reportsDateMark}
+            reportItems={reportsCalendarItem}
+          />
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

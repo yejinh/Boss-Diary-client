@@ -49,7 +49,7 @@ export default function SettingsScreen(props) {
             source={{ uri: url }}
           />
           <View>
-            <Text>{points} points</Text>
+            <Text style={styles.point}>{points} points</Text>
             <Button
               onPress={_onClick}
               title='구매하기'
@@ -79,11 +79,14 @@ const styles = StyleSheet.create({
   templateContainer: {
     flex: 1,
     alignItems: 'center',
-    marginTop: 20
+    marginTop: -20
   },
   templateThum: {
     width: 400,
     height: 600,
     borderRadius: 10
+  },
+  point: {
+    marginLeft: 10
   }
 });

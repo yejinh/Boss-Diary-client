@@ -1,6 +1,6 @@
 import React from 'react';
 import { Agenda, LocaleConfig } from 'react-native-calendars';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import CalendarItem from './CalendarItem';
 import CalendarDay from './CalendarDay';
 import EmptyScreen from './EmptyScreen';

@@ -9,7 +9,7 @@ import { Form, Textarea } from 'native-base';
 import BottomButton from '../components/BottomButton';
 
 export default function NewReportInputScreen(props) {
-  const [ text, setText ] = React.useState('라떼는 말이야...');
+  const [ text, setText ] = React.useState('');
 
   const { navigation } = props;
   const { template } = props.navigation.state.params;

@@ -78,6 +78,12 @@ export default function reducer(state = initialState, action) {
       numOfNewReport: state.numOfNewReport + 1
     };
 
+  case actionTypes.ADD_NEW_TEMPLATE:
+    return {
+      ...state,
+      userTemplates: [ actions.newTemplate, ...state.userTemplates ]
+    };
+
   case actionTypes.CLEAR_DATA:
     return initialState;
 

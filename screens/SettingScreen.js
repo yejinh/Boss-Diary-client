@@ -24,8 +24,8 @@ export default function SettingScreen(props) {
   const _logout = async() => {
     try {
       Alert.alert(
-        '확인',
-        '확인?',
+        '로그아웃',
+        '로그아웃 하시겠습니까?',
         [
           {
             text: '로그아웃',
@@ -47,10 +47,13 @@ export default function SettingScreen(props) {
     <Container>
       <Content>
         <Separator bordered>
-          <Text>소유자..</Text>
+          <Text>소유자</Text>
         </Separator>
         <ListItem>
           <Text>Hyejin Kim</Text>
+        </ListItem>
+        <ListItem>
+          <Text>yejiinh@gmail.com</Text>
         </ListItem>
         <Separator bordered>
           <Text>계정</Text>

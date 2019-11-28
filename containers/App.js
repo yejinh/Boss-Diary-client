@@ -15,6 +15,7 @@ import {
   refreshUserReports,
   refreshRequests,
   addNewReport,
+  addNewTemplate,
   deleteReport,
   clearData,
 } from '../actions';
@@ -27,6 +28,8 @@ const getUserId = async() => await SecureStore.getItemAsync('USER_ID');
 
 const dispatchFacebookData = dispatch => async() => {
   try {
+    await Facebook.initializeAsync(FACEBOOK_APP_ID);
+
     const { type, token } = await Facebook.logInWithReadPermissionsAsync(
       FACEBOOK_APP_ID,
       { permissions: ['public_profile', 'email'] }
@@ -50,6 +53,7 @@ const dispatchFacebookData = dispatch => async() => {
     await SecureStore.setItemAsync('USER_ID', user_id);
 
     Alert.alert('로그인', `안녕하세요, ${name} 부장님`);
+    return;
   } catch(err) {
     Alert.alert('로그인 에러', err.message);
     console.log(err);
@@ -200,7 +204,7 @@ const dispatchTemplateAdd = dispatch => async(templateId, price) => {
     const accessToken = await getAccessToken()
     const userId = await getUserId();
 
-    await fetch(`${API_URL}/api/users/${userId}/templates`, {
+    const res = await fetch(`${API_URL}/api/users/${userId}/templates`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -209,6 +213,9 @@ const dispatchTemplateAdd = dispatch => async(templateId, price) => {
       body: JSON.stringify({ templateId, price })
     });
 
+    const { newTemplate } = res.json();
+
+    dispatch(addNewTemplate(newTemplate));
   } catch(err) {
     Alert.alert('템플릿 구입 에러', err.message);
     console.log(err);
@@ -237,13 +244,14 @@ const dispatchUserTemplates = dispatch => async() => {
   }
 };
 
-const dispatchReportSubmit = dispatch => async(text, reportUri, templateId) => {
+const dispatchReportSubmit = dispatch => async(title, text, reportUri, templateId) => {
   try {
     const accessToken = await getAccessToken();
     const userId = await getUserId();
     const data = new FormData();
 
     data.append('photo', reportUri);
+    data.append('title', title);
     data.append('text', text);
     data.append('templateId', templateId);
     data.append('date', new Date().toISOString());

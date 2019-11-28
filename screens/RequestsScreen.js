@@ -6,6 +6,7 @@ import EmptyScreen from '../components/EmptyScreen';
 
 export default function RequestsScreen(props) {
   const [ isLoading, setIsLoading ] = useState(false);
+  const [ isFetching, setIsFetching ] = useState(false);
   const [ isRefreshing, setIsRefreshing ] = useState(false);
   const [ isAllLoaded, setIsAllLoaded ] = useState(false);
   const [ pageNumber, setPageNumber ] = useState(1);
@@ -24,12 +25,14 @@ export default function RequestsScreen(props) {
 
   const _loadMoreReports = async() => {
     try {
-      if (isAllLoaded) return;
+      if (isAllLoaded || isFetching) return;
 
+      setIsFetching(true);
       const fetchedReports = await fetchApprovalRequests(pageNumber);
 
       if (!fetchedReports.length) {
         setIsLoading(false);
+        setIsFetching(false);
         setIsAllLoaded(true);
 
         if (pageNumber === 1) {
@@ -40,6 +43,7 @@ export default function RequestsScreen(props) {
 
       setPageNumber(pageNumber + 1);
       setIsLoading(false);
+      setIsFetching(false);
     } catch(err) {
       setIsLoading(false);
       console.log(err);

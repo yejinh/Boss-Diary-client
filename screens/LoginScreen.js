@@ -2,7 +2,6 @@ import React from 'react';
 import {
   ScrollView,
   StyleSheet,
-  Alert,
   Text,
   TouchableOpacity,
   View,
@@ -15,9 +14,9 @@ export default function LoginScreen(props) {
 
   const _login = async() => {
     try {
-        await fetchFacebookData();
+      await fetchFacebookData();
 
-        navigation.navigate('Main');
+      navigation.navigate('Main');
     } catch(err) {
       console.log(err);
       navigation.navigate('Login');
@@ -86,6 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 100
+    marginTop: 90
   }
 });
